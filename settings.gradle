@@ -1,0 +1,4 @@
+rootProject.name='JasonSDK'
+
+include ':app'
+include ':sdk'
