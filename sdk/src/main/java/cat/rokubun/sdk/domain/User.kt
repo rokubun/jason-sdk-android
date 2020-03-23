@@ -4,6 +4,7 @@ public class User {
 
     var name: String? = ""
     var surname: String? = ""
-    constructor(id: Int?, email: String?, token: String?)
+    constructor(id: Int?, email: String?, secretToken: String?)
 
 }
+

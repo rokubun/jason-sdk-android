@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var passwordEditText: EditText
     @BindView(R.id.userEditText)
     lateinit var userEditText: EditText
-    var user: User? =  null
+    var user: User? = null
+    var email: String ? = null
+    var password: String ? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,25 +31,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     @OnClick(R.id.connectButton)
-    fun login(){
+    fun login() {
         //TODO CONTROL ERRORS
-        val email = userEditText.text.toString()
-        val pass = passwordEditText.text.toString()
-        if (verification(email, pass)){
-            if(JasonClient.login(email, pass)){
+        if (validate()) {
+            JasonClient.login(this.email, this.password)
+            if(JasonClient.isValid!!){
                 Toast.makeText(this, "Connection Success!!", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show()
+            } else {
+                onLoginFailed()
+                return
             }
         }
     }
-    private fun verification(email: String, pass: String): Boolean{
-        if(!email.isEmpty() && !pass.isEmpty()){
-            return true
-        }else{
-            Toast.makeText(this, "Wrong username or password!", Toast.LENGTH_LONG).show()
-            return false
-        }
 
+    fun onLoginFailed() {
+        Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
+    }
+
+    private fun validate():Boolean{
+        var valid = true
+        email = userEditText.text.toString()
+        password = passwordEditText.text.toString()
+
+        if(email!!.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            userEditText.error = "Enter a valid email address"
+            valid = false
+        } else {
+            userEditText.error = null
+        }
+        if (password!!.isEmpty()){
+            passwordEditText.error = "Enter a password"
+            valid = false
+        }else{
+            passwordEditText.error = null
+        }
+        return valid
     }
 }
+
