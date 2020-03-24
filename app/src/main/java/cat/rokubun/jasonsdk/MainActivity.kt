@@ -2,14 +2,22 @@ package cat.rokubun.jasonsdk
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.sdk.JasonClient
 import cat.rokubun.sdk.domain.User
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     var email: String ? = null
     var password: String ? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,18 +41,25 @@ class MainActivity : AppCompatActivity() {
     fun login() {
         //TODO CONTROL ERRORS
         if (validate()) {
-            JasonClient.login(this.email, this.password)
-            if(JasonClient.isValid!!){
-                Toast.makeText(this, "Connection Success!!", Toast.LENGTH_SHORT).show()
-            } else {
-                onLoginFailed()
-                return
-            }
+            JasonClient.login(this.email, this.password)?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe()
+            loginVerification()
+
         }
     }
 
-    fun onLoginFailed() {
-        Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
+    private fun loginVerification() {
+        JasonClient.codeResponse.observe(this, Observer {
+            when (it.code) {
+                500 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
+                200 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
+                401 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
+                else -> {
+                    Toast.makeText(baseContext, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun validate():Boolean{

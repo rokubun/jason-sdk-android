@@ -1,10 +1,12 @@
 package cat.rokubun.sdk.domain
 
-public class User {
 
-    var name: String? = ""
-    var surname: String? = ""
-    constructor(id: Int?, email: String?, secretToken: String?)
 
-}
+
+data class User(
+    var name: String?,
+    var surname: String?,
+    var secretToken: String?,
+    var email: String?,
+    var id: Int? )
 
