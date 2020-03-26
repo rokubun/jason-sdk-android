@@ -1,5 +1,6 @@
 package cat.rokubun.jasonsdk
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -52,8 +53,19 @@ class MainActivity : AppCompatActivity() {
     private fun loginVerification() {
         JasonClient.codeResponse.observe(this, Observer {
             when (it.code) {
+                200 -> {
+                    Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
+                    user = JasonClient.user
+                    val intent = Intent(this, SubmitProcessActivity::class.java).apply {
+                        putExtra("TOKEN", JasonClient.user?.secretToken)
+                        Log.d("token", JasonClient.user?.secretToken)
+                        startActivity(intent)
+                    }
+                    startActivity(intent)
+
+
+                }
                 500 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
-                200 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
                 401 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
                 else -> {
                     Toast.makeText(baseContext, "Error", Toast.LENGTH_SHORT).show()
