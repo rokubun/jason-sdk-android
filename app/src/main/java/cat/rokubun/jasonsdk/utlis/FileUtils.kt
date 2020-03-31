@@ -29,21 +29,5 @@ object FileUtils {
         }
     } catch (e : Exception) { null }
 
-    fun SubmitProcessActivity.createTmpFile(it: String, fileName: String): File? {
-        val pickFile: File = File(baseContext.cacheDir, fileName)
-        try {
-
-            val inputStream = ByteArrayInputStream(it.toByteArray(Charsets.UTF_8))
-            val outputStream = FileOutputStream(pickFile)
-            inputStream.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-        } catch (io: IOException) {
-            Log.e("create: ", "", io)
-        }
-        return pickFile
-    }
 
 }
