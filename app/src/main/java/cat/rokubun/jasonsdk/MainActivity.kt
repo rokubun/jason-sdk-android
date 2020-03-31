@@ -1,22 +1,21 @@
 package cat.rokubun.jasonsdk
 
+import android.Manifest
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import cat.rokubun.jasonsdk.utlis.Permissions
 import cat.rokubun.sdk.JasonClient
 import cat.rokubun.sdk.domain.User
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
@@ -32,10 +31,23 @@ class MainActivity : AppCompatActivity() {
     var email: String ? = null
     var password: String ? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
+        val requiredPermissions = arrayOf<String>(
+            Manifest.permission.INTERNET,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.CHANGE_WIFI_STATE
+        )
+        Permissions.checkPermissions(this, requiredPermissions)
     }
 
     @OnClick(R.id.connectButton)
@@ -62,8 +74,6 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     startActivity(intent)
-
-
                 }
                 500 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
                 401 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
@@ -93,5 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
         return valid
     }
+
+
 }
 
