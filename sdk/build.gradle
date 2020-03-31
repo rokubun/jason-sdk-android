@@ -2,7 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
+// Def API URL
+//def URL = "http://api-argonaut.rokubun.cat:80/api/"
 
 android {
     compileSdkVersion 29
@@ -22,6 +23,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            /*resValue "string",   'URL', "\"/http://api-argonaut.rokubun.cat:80/api/users/\""
+            resValue "string",  'APIKEY', "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"*/
         }
     }
     kotlinOptions {
@@ -45,9 +48,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
     // https://github.com/ReactiveX/RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-        implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     implementation 'androidx.core:core-ktx:1.2.0'
 

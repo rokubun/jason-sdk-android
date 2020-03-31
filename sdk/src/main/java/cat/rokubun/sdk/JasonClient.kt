@@ -1,6 +1,7 @@
 package cat.rokubun.sdk
 
 
+import android.location.Location
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.util.*
 
 object JasonClient {
     //TODO EXTRACT TO STRING.xml
@@ -74,18 +76,20 @@ object JasonClient {
 
     fun submitProcess(type: String, roverFile: File) {
         if (user?.secretToken!!.isNotEmpty() && API_KEY.isNotEmpty()) {
+            var location : Location? = null
+
 
             val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
             val partFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
             val secretToken = user?.secretToken!!.toRequestBody()
+            val typePart = type.toRequestBody()
 
-            retrofitInstance.submitProcess(secretToken, type, partFile)
+            retrofitInstance.submitProcess(secretToken, typePart, partFile)
                 .enqueue((object : Callback<SubmitProcessResult> {
 
                     override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
                         Log.e("Submit: ", "error:", t.cause)
                     }
-
                     override fun onResponse(
                         call: Call<SubmitProcessResult>,
                         response: Response<SubmitProcessResult>
@@ -97,8 +101,32 @@ object JasonClient {
         }
     }
 
-    fun submitProcess(type: String, roverFile: File, baseFile: File, location: List<Double> ) {
+    fun submitProcess(type: String, roverFile: File, baseFile: File, location: String) {
 
+        val requestRoverFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
+        val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestRoverFile)
+
+        val requestBaseFile = roverFile.asRequestBody(getMimeType(baseFile.name)?.toMediaTypeOrNull())
+        val basePartFile = MultipartBody.Part.createFormData("base_file", roverFile.name, requestBaseFile)
+
+        val requestLocation = location.toRequestBody()
+        val secretToken = user?.secretToken!!.toRequestBody()
+        val typePart = type.toRequestBody()
+
+        retrofitInstance.submitProcess(secretToken, typePart, roverPartFile, basePartFile, requestLocation)
+            .enqueue((object : Callback<SubmitProcessResult> {
+
+                override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
+                    Log.e("Submit: ", "error:", t.cause)
+                }
+                override fun onResponse(
+                    call: Call<SubmitProcessResult>,
+                    response: Response<SubmitProcessResult>
+                ) {
+                    Log.d("Response:", response.message())
+                    SubmitProcessResult(response.body()?.id, response.body()?.message)
+                }
+            }))
     }
     private fun getMimeType(url: String?): String? {
         var type: String? = null
@@ -108,7 +136,11 @@ object JasonClient {
         }
         return type
     }
-
+    private fun toQueryString(location: Location): String {
+        return String.format(
+            Locale.ENGLISH, "%.08f,%.08f,%.08f",
+            location.latitude, location.longitude, location.altitude);
+    }
     enum class ResponseCodeEum(val code: Int, val description: String) {
         OK(200, "Login susccess"),
         FORBIDDEN(401, "User or password incorrect"),
