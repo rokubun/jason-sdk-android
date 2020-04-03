@@ -1,12 +1,15 @@
 package cat.rokubun.jasonsdk
 
+
 import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,22 +26,22 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 
-import java.lang.StringBuilder
-
-
 class SubmitProcessActivity : AppCompatActivity() {
 
     @BindView(R.id.process_button)
     lateinit var processButton: Button
+    @BindView(R.id.Logbutton)
+    lateinit var logButton: Button
+    @BindView(R.id.processEditText)
+    lateinit var processNumber: EditText
     @BindView(R.id.upload_action_button)
     lateinit var uploadButton: FloatingActionButton
-
-
     @BindView(R.id.roverFileNameTextView)
     lateinit var roverFileNameTextView: TextView
     @BindView(R.id.baseFileTextView)
     lateinit var baseFileNameTextView: TextView
 
+    var logListenerExample  = LogListenerExample()
     private var uploadFile: File? = null
     var fileList: MutableList<File> = mutableListOf<File>()
     private val PICKFILE_RESULT_CODE: Int = 1001
@@ -77,6 +80,15 @@ class SubmitProcessActivity : AppCompatActivity() {
 
     }
 
+    @OnClick(R.id.Logbutton)
+    fun getLogs() {
+            val number: Int = processNumber.text.toString().toInt()
+            try{
+                JasonClient.registerLogListener(logListenerExample, number)
+            }catch (e: Exception){
+                Log.e("Error: ",  "", e)
+            }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

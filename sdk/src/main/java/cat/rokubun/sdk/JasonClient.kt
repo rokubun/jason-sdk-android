@@ -5,40 +5,50 @@ import android.location.Location
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
+import cat.rokubun.sdk.domain.ProcessInformation
 import cat.rokubun.sdk.domain.User
 import cat.rokubun.sdk.repository.ServiceFactory
+
 import cat.rokubun.sdk.repository.remote.ApiService
+import cat.rokubun.sdk.repository.remote.dto.ProcessStatusResult
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
 import cat.rokubun.sdk.utils.Hasher
 import io.reactivex.Single
+import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 object JasonClient {
+    private val DELAY_LOG_REQUEST: Long = 1000L
+    private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
+    private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
+
     //TODO EXTRACT TO STRING.xml
     private var URL: String = "http://api-argonaut.rokubun.cat:80/api/"
-
     private var API_KEY = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
-    private val retrofitInstance: ApiService
+    private var retrofitInstance: ApiService
     var codeResponse = MutableLiveData<ResponseCodeEum>()
     var user: User? = null
-
-
+    var logListener: LogListener? = null
+    var logRequestJob: Job?= null
     init {
         retrofitInstance = ServiceFactory.getClient(URL, API_KEY)?.create(ApiService::class.java)!!
+
     }
 
     fun login(email: String?, password: String?): Single<ResponseCodeEum?>? {
 
         return Single.create{
+
             retrofitInstance.userlogin(email, Hasher.hash(password))
                 .enqueue((object : Callback<UserLoginResult> {
                     override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
@@ -128,6 +138,50 @@ object JasonClient {
                 }
             }))
     }
+    fun registerLogListener( logListener: LogListener, idProcess: Int, timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS){
+        this.logListener = logListener
+
+
+        logRequestJob = CoroutineScope(Dispatchers.IO).launch {
+            repeat(MAX_LOG_REQUEST_RETRIES) {i ->
+                val response = getProccessInformation(idProcess)
+                try {
+                    when (response.process.status) {
+                        "RUNNING" -> {
+
+                            val processLogList: List<ProcessLog>? =
+                                ProcessResultConverter.getProcessLogFromStatusResult(
+                                    response
+                                )
+                            logListener.onLogReceived(processLogList!!)
+                            delay(DELAY_LOG_REQUEST)
+                        }
+                        "FINISHED" -> {
+                            val processResult: ProcessResult? = ProcessResult(response.results)
+                            logListener.onFinish(processResult!!)
+                            logRequestJob?.cancelAndJoin()
+                        }
+                        else -> {
+                            val processError: ProcessError? = null
+                            logListener.onError(processError!!)
+                            logRequestJob?.cancelAndJoin()
+                        }
+                    }
+                    //FIXME TYPE ERROR
+                } catch (e: Throwable) {
+                    Log.e("Throwable", "", e)
+                    logRequestJob?.cancelAndJoin()
+                }
+            }
+        }
+    }
+
+    suspend fun unregisterLogListener(){
+        logRequestJob?.cancelAndJoin()
+        logListener = null
+    }
+    private suspend fun getProccessInformation(processId: Int) =  retrofitInstance.getProcessInformation(processId, user?.secretToken!!)
+
     private fun getMimeType(url: String?): String? {
         var type: String? = null
         val extension = MimeTypeMap.getFileExtensionFromUrl(url)

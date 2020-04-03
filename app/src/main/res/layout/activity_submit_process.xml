@@ -25,7 +25,10 @@
         android:text="Process"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/upload_action_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Logbutton"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/roverFileNameTextView"
@@ -47,12 +50,39 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/processEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roverFileNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/roverFileNameTextView"
+        app:layout_constraintVertical_bias="0.017" />
 
+    <EditText
+        android:id="@+id/processEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginBottom="232dp"
+        android:ems="10"
+        android:hint="Id Process"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/Logbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Log"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.359"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/processEditText"
+        app:layout_constraintVertical_bias="0.18" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

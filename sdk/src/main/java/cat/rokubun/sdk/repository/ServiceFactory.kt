@@ -1,5 +1,6 @@
 package cat.rokubun.sdk.repository
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,7 +28,8 @@ object ServiceFactory {
                         .build()
                     return@Interceptor chain.proceed(request)
                 })
-                .addInterceptor(interceptor)
+                    //FIXME DEBUGMODE
+                //.addInterceptor(interceptor)
                 .build()
             retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -38,4 +40,5 @@ object ServiceFactory {
         }
     return retrofit
     }
+
 }

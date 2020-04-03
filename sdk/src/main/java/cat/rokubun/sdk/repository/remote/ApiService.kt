@@ -1,5 +1,6 @@
 package cat.rokubun.sdk.repository.remote
 
+import cat.rokubun.sdk.repository.remote.dto.ProcessStatusResult
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
 import okhttp3.MultipartBody
@@ -37,5 +38,13 @@ interface ApiService {
                       @Part ("location") location: RequestBody): Call<SubmitProcessResult>
 
 
-    
+    /*
+    curl -X GET "http://api-argonaut.rokubun.cat:80/api/processes/3600?token=38289D-9F63D5-6E0DA1-ED4539-8E8480"
+    -H  "accept: application/json"
+    -H  "ApiKey: ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
+     */
+
+    @GET( "processes/{id}")
+    suspend fun getProcessInformation(@Path("id") processId: Int, @Query("token") token: String): ProcessStatusResult
 }
+
