@@ -20,6 +20,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.http2.Http2Connection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -141,37 +142,37 @@ object JasonClient {
     fun registerLogListener( logListener: LogListener, idProcess: Int, timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS){
         this.logListener = logListener
 
-
         logRequestJob = CoroutineScope(Dispatchers.IO).launch {
-            repeat(MAX_LOG_REQUEST_RETRIES) {i ->
+            repeat(MAX_LOG_REQUEST_RETRIES) { i ->
                 val response = getProccessInformation(idProcess)
                 try {
-                    when (response.process.status) {
+                    when (response.body()?.process?.status) {
                         "RUNNING" -> {
 
                             val processLogList: List<ProcessLog>? =
                                 ProcessResultConverter.getProcessLogFromStatusResult(
-                                    response
+                                    response.body()!!
                                 )
                             logListener.onLogReceived(processLogList!!)
                             delay(DELAY_LOG_REQUEST)
                         }
                         "FINISHED" -> {
-                            val processResult: ProcessResult? = ProcessResult(response.results)
+                            val processResult: ProcessResult? = ProcessResult(response.body()?.results!!)
                             logListener.onFinish(processResult!!)
-                            logRequestJob?.cancelAndJoin()
+                            logRequestJob?.join()
                         }
                         else -> {
-                            val processError: ProcessError? = null
-                            logListener.onError(processError!!)
-                            logRequestJob?.cancelAndJoin()
+                            logRequestJob?.cancel()
+                            val processError: ProcessError? = ProcessError(response.code())
+                            Log.e("error", processError?.getErrorMessage(),  Throwable())
                         }
                     }
-                    //FIXME TYPE ERROR
                 } catch (e: Throwable) {
+                    logRequestJob?.cancel()
+                    val processError: ProcessError? = ProcessError(response.code())
+                    Log.e("error", processError?.getErrorMessage(), e)
                     Log.e("Throwable", "", e)
-                    logRequestJob?.cancelAndJoin()
-                }
+                                }
             }
         }
     }
@@ -199,6 +200,7 @@ object JasonClient {
         OK(200, "Login susccess"),
         FORBIDDEN(401, "User or password incorrect"),
         ERROR(500, "Internal server error")
+
     }
 }
 

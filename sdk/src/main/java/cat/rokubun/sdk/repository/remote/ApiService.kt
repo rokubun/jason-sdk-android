@@ -6,6 +6,7 @@ import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -45,6 +46,6 @@ interface ApiService {
      */
 
     @GET( "processes/{id}")
-    suspend fun getProcessInformation(@Path("id") processId: Int, @Query("token") token: String): ProcessStatusResult
+    suspend fun getProcessInformation(@Path("id") processId: Int, @Query("token") token: String): Response<ProcessStatusResult>
 }
 
