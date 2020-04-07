@@ -1,0 +1,29 @@
+image: rokubun/ci-base
+
+variables:
+  ANDROID_COMPILE_SDK: "28"
+  ANDROID_BUILD_TOOLS: "28.0.2"
+  ANDROID_SDK_TOOLS:   "4333796"
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+  - export ANDROID_HOME=/android-sdk-linux
+  - export PATH=$PATH:$ANDROID_HOME/platform-tools/
+  - GIT_REPOSITORY_URL=`echo ${CI_PROJECT_URL} | sed "s,://,://${CI_CORE_USER}:${CI_CORE_TOKEN}@,g" | awk '{print $0".git";}'`
+  - git config --global user.email "ci@rokubun.cat"
+  - git config --global user.name "Gitlab CI"
+  - git remote set-url origin ${GIT_REPOSITORY_URL}
+#  - chmod +x ./gradlew
+
+stages:
+  - deploy
+
+tag:
+  stage: deploy
+  only:
+    - master
+  script:
+    - VERSION=`get_version | cut -d"-" -f1`
+    - echo "Building ${VERSION}"
+    - git tag -fa ${VERSION} -m "ci autotag ${VERSION}" && git push --tags --force
+
