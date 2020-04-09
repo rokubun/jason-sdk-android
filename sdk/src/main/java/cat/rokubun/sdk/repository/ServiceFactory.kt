@@ -1,5 +1,10 @@
 package cat.rokubun.sdk.repository
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import cat.rokubun.sdk.BuildConfig
+import cat.rokubun.sdk.utils.NetworkConnectivity
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,18 +14,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-object ServiceFactory {
+class ServiceFactory(private val context: Context) {
     //Creating Auth Interceptor to add api_key query in front of all the requests
+
+    val networkInterceptor: Interceptor = NetworkConnectivity(context)
     var retrofit: Retrofit? = null
     fun getClient(baseUrl: String, apiKey: String): Retrofit? {
+        val client = OkHttpClient.Builder()
         if (retrofit == null) {
             val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-            val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(Interceptor { chain ->
+                client.addInterceptor(Interceptor { chain ->
                     val original = chain.request()
                     //header
                     val request = original.newBuilder()
@@ -29,12 +32,15 @@ object ServiceFactory {
                         .build()
                     return@Interceptor chain.proceed(request)
                 })
-                    //FIXME DEBUGMODE
-                //.addInterceptor(interceptor)
+                .addInterceptor(networkInterceptor)
                 .build()
+            interceptor.level =  HttpLoggingInterceptor.Level.BODY
+            //FIXME DEBUGMODE
+            //client.addInterceptor(interceptor)
+
             retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(client)
+                .client(client.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
