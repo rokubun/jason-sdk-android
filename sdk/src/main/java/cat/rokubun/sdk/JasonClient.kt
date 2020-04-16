@@ -13,9 +13,7 @@ import cat.rokubun.sdk.repository.remote.ApiService
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
 import cat.rokubun.sdk.utils.Hasher
-import cat.rokubun.sdk.utils.NetworkConnectivity
 import io.reactivex.Single
-import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -23,13 +21,13 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.HttpException
 import retrofit2.Response
 import java.io.File
+import java.net.SocketTimeoutException
 import java.util.*
 
 
-object JasonClient {
+class JasonClient {
     private val DELAY_LOG_REQUEST: Long = 1000L
     private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
     private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
@@ -38,28 +36,24 @@ object JasonClient {
     private var URL: String = "http://api-argonaut.rokubun.cat:80/api/"
     private var API_KEY = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
     private var retrofitInstance: ApiService? = null
-    var codeResponse = MutableLiveData<ResponseCodeEum>()
-    var user: User? = null
+    private var user: User? = null
     private var logListener: LogListener? = null
     private var logRequestJob: Job? = null
     private var serviceFactory: ServiceFactory? = null
 
 
-    fun init(context: Context) {
+    constructor(context: Context) {
         serviceFactory = ServiceFactory(context)
         retrofitInstance = serviceFactory!!.getClient(URL, API_KEY)?.create(ApiService::class.java)!!
     }
-    fun login(email: String?, password: String?): Single<ResponseCodeEum?>? {
-
-        return Single.create {
-
+    fun login(email: String?, password: String?): Single<User> {
+        val map : MutableMap<Int, String> = mutableMapOf<Int, String>()
+        return Single.create { emitter ->
             retrofitInstance?.userlogin(email, Hasher.hash(password))
                 ?.enqueue((object : Callback<UserLoginResult> {
                     override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
-                        Log.e("Login", "onFailure", t)
-                        codeResponse.value = ResponseCodeEum.ERROR
+                        emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
                     }
-
                     override fun onResponse(
                         call: Call<UserLoginResult>,
                         response: Response<UserLoginResult>
@@ -69,18 +63,15 @@ object JasonClient {
                                 user = User(
                                     response.body()?.name,
                                     response.body()?.surname,
-                                    response.body()?.token,
+                                    response.body()!!.token,
                                     response.body()?.email,
                                     response.body()?.id
                                 )
-                                Log.d("response", user?.email + " " + user?.secretToken)
-                                Log.d(
-                                    "response.body",
-                                    response.body()?.id.toString() + " " + response.body()?.token
-                                )
-                                codeResponse.postValue(ResponseCodeEum.OK)
+                                emitter.onSuccess(user!!)
                             }
-                            401 -> codeResponse.postValue(ResponseCodeEum.FORBIDDEN)
+                            401 -> {
+                                emitter.onError(Throwable(ResponseCodeEum.FORBIDDEN.description))
+                            }
                         }
                     }
                 }))
@@ -226,7 +217,7 @@ object JasonClient {
     enum class ResponseCodeEum(val code: Int, val description: String) {
         OK(200, "Login susccess"),
         FORBIDDEN(401, "User or password incorrect"),
-        ERROR(500, "Internal server error")
+        ERROR(500, "Service is no available")
 
     }
 }
