@@ -6,6 +6,7 @@ import android.location.Location
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
+import cat.rokubun.sdk.domain.LoginService
 import cat.rokubun.sdk.domain.User
 import cat.rokubun.sdk.repository.ServiceFactory
 
@@ -41,6 +42,7 @@ class JasonClient {
     private var logRequestJob: Job? = null
     private var serviceFactory: ServiceFactory? = null
 
+    private var loginService: LoginService? = null
 
     companion object {
         const val URL: String = "http://api-argonaut.rokubun.cat:80/api/"
@@ -48,39 +50,12 @@ class JasonClient {
     }
 
     constructor(context: Context) {
+        loginService = LoginService(context)
         serviceFactory = ServiceFactory(context)
         retrofitInstance = serviceFactory!!.getService(Companion.URL, Companion.API_KEY)?.create(ApiService::class.java)!!
     }
-    fun login(email: String?, password: String?): Single<User> {
-        val map : MutableMap<Int, String> = mutableMapOf<Int, String>()
-        return Single.create { emitter ->
-            retrofitInstance?.userlogin(email, Hasher.hash(password))
-                ?.enqueue((object : Callback<UserLoginResult> {
-                    override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
-                        emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
-                    }
-                    override fun onResponse(
-                        call: Call<UserLoginResult>,
-                        response: Response<UserLoginResult>
-                    ) {
-                        when (response.code()) {
-                            200 -> {
-                                user = User(
-                                    response.body()?.name,
-                                    response.body()?.surname,
-                                    response.body()!!.token,
-                                    response.body()?.email,
-                                    response.body()?.id
-                                )
-                                emitter.onSuccess(user!!)
-                            }
-                            401 -> {
-                                emitter.onError(Throwable(ResponseCodeEum.FORBIDDEN.description))
-                            }
-                        }
-                    }
-                }))
-        }
+    fun login(email: String?, password: String?): Single<User>? {
+        return loginService?.login(email, password)
     }
 
     fun submitProcess(type: String, roverFile: File) {
@@ -211,21 +186,6 @@ class JasonClient {
         }
         return type
     }
-
-    private fun toQueryString(location: Location): String {
-        return String.format(
-            Locale.ENGLISH, "%.08f,%.08f,%.08f",
-            location.latitude, location.longitude, location.altitude
-        );
-    }
-
-    enum class ResponseCodeEum(val code: Int, val description: String) {
-        OK(200, "Login susccess"),
-        FORBIDDEN(401, "User or password incorrect"),
-        ERROR(500, "Service is no available")
-
-    }
-
 }
 
 

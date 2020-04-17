@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity() {
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(
-                { result ->  Toast.makeText(baseContext, result.secretToken, Toast.LENGTH_SHORT).show()},
+                { result ->
+                    val intent = Intent(this, SubmitProcessActivity::class.java)
+                    startActivity(intent)
+                },
                 { error -> Toast.makeText(baseContext,  error.localizedMessage, Toast.LENGTH_SHORT).show()}
             )
     }
