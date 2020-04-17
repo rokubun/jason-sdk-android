@@ -45,6 +45,8 @@ class SubmitProcessActivity : AppCompatActivity() {
     private var uploadFile: File? = null
     var fileList: MutableList<File> = mutableListOf<File>()
     private val PICKFILE_RESULT_CODE: Int = 1001
+    var jasonClient: JasonClient ?= null
+
 
     var location: Location? = null
     private var builder = StringBuilder()
@@ -52,22 +54,25 @@ class SubmitProcessActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submit_process)
+        jasonClient = JasonClient(applicationContext)
+        //jasonClient.init(baseContext)
         ButterKnife.bind(this)
     }
+
 
     @OnClick(R.id.process_button)
     fun processFile() {
         when {
             fileList.isNotEmpty() -> {
                 val location = "41.418524750001879,1.986951633036511,319.924932730384171"
-                JasonClient.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
+
+                jasonClient!!.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
             }
-            uploadFile != null -> JasonClient.submitProcess("GNSS", uploadFile!!)
+            uploadFile != null -> jasonClient!!.submitProcess("GNSS", uploadFile!!)
 
             else -> Toast.makeText(baseContext, "Please choose a file to process", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     @OnClick(R.id.upload_action_button)
     fun uploadFile() {
@@ -84,7 +89,7 @@ class SubmitProcessActivity : AppCompatActivity() {
     fun getLogs() {
             val number: Int = processNumber.text.toString().toInt()
             try{
-                JasonClient.registerLogListener(logListenerExample, number)
+                jasonClient?.registerLogListener(logListenerExample, number)
             }catch (e: Exception){
                 Log.e("Error: ",  "", e)
             }
@@ -113,7 +118,9 @@ class SubmitProcessActivity : AppCompatActivity() {
         }
 
     }
-
+    fun Intent.getData(key: String): String {
+        return extras?.getString(key) ?: "intent is null"
+    }
     private fun SubmitProcessActivity.createTmpFile(
         parcelFileDescriptor: ParcelFileDescriptor?,
         fileUri: Uri

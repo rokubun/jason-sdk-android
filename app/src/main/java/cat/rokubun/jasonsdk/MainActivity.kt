@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -30,8 +31,7 @@ class MainActivity : AppCompatActivity() {
     var user: User? = null
     var email: String ? = null
     var password: String ? = null
-
-
+    var jasonClient: JasonClient ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,40 +48,23 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.CHANGE_WIFI_STATE
         )
         Permissions.checkPermissions(this, requiredPermissions)
+        jasonClient = JasonClient(baseContext)
+        //jasonClient!!.init(baseContext)
     }
 
     @OnClick(R.id.connectButton)
     fun login() {
         //TODO CONTROL ERRORS
-        if (validate()) {
-            JasonClient.login(this.email, this.password)?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe()
-            loginVerification()
-
-        }
-    }
-
-    private fun loginVerification() {
-        JasonClient.codeResponse.observe(this, Observer {
-            when (it.code) {
-                200 -> {
-                    Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
-                    user = JasonClient.user
-                    val intent = Intent(this, SubmitProcessActivity::class.java).apply {
-                        putExtra("TOKEN", JasonClient.user?.secretToken)
-                        Log.d("token", JasonClient.user?.secretToken)
-                        startActivity(intent)
-                    }
-                    startActivity(intent)
-                }
-                500 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
-                401 -> Toast.makeText(baseContext, it.description, Toast.LENGTH_SHORT).show()
-                else -> {
-                    Toast.makeText(baseContext, "Error", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+        //if (validate()) {
+        email = userEditText.text.toString()
+        password = passwordEditText.text.toString()
+        jasonClient?.login(email, password)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(
+                { result ->  Toast.makeText(baseContext, result.secretToken, Toast.LENGTH_SHORT).show()},
+                { error -> Toast.makeText(baseContext,  error.localizedMessage, Toast.LENGTH_SHORT).show()}
+            )
     }
 
     private fun validate():Boolean{
