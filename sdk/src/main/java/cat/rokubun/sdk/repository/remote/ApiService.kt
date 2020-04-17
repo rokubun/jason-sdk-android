@@ -36,7 +36,7 @@ interface ApiService {
                       @Part ("type") type: RequestBody,
                       @Part rover_file: MultipartBody.Part,
                       @Part base_file: MultipartBody.Part,
-                      @Part ("location") location: RequestBody): Call<SubmitProcessResult>
+                      @Part ("location") location: RequestBody?): Call<SubmitProcessResult>
 
 
     /*

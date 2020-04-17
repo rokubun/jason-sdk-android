@@ -4,16 +4,13 @@ package cat.rokubun.sdk
 import android.content.Context
 import android.util.Log
 import android.webkit.MimeTypeMap
-import androidx.lifecycle.MutableLiveData
 import cat.rokubun.sdk.domain.Location
-import cat.rokubun.sdk.domain.LoginService
+import cat.rokubun.sdk.repository.JasonService
 import cat.rokubun.sdk.domain.User
 import cat.rokubun.sdk.repository.ServiceFactory
 
 import cat.rokubun.sdk.repository.remote.ApiService
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
-import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
-import cat.rokubun.sdk.utils.Hasher
 import io.reactivex.Single
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -24,8 +21,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.net.SocketTimeoutException
-import java.util.*
 
 
 class JasonClient {
@@ -42,7 +37,7 @@ class JasonClient {
     private var logRequestJob: Job? = null
     private var serviceFactory: ServiceFactory? = null
 
-    private var loginService: LoginService? = null
+    private var jasonService: JasonService? = null
 
     companion object {
         const val URL: String = "http://api-argonaut.rokubun.cat:80/api/"
@@ -50,78 +45,20 @@ class JasonClient {
     }
 
     constructor(context: Context) {
-        loginService = LoginService(context)
+        jasonService = JasonService(context)
         serviceFactory = ServiceFactory(context)
         retrofitInstance = serviceFactory!!.getService(Companion.URL, Companion.API_KEY)?.create(ApiService::class.java)!!
     }
     fun login(email: String?, password: String?): Single<User>? {
-        return loginService?.login(email, password)
+        return jasonService?.login(email, password)
     }
 
     fun submitProcess(type: String, roverFile: File) {
-        if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
-
-            val requestFile =
-                roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
-            val partFile =
-                MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
-            val secretToken = user?.secretToken!!.toRequestBody()
-            val typePart = type.toRequestBody()
-
-            retrofitInstance?.submitProcess(secretToken, typePart, partFile)
-                ?.enqueue((object : Callback<SubmitProcessResult> {
-
-                    override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
-                        Log.e("Submit: ", "error:", t.cause)
-                    }
-
-                    override fun onResponse(
-                        call: Call<SubmitProcessResult>,
-                        response: Response<SubmitProcessResult>
-                    ) {
-                        Log.d("Response:", response.message())
-                        SubmitProcessResult(response.body()?.id, response.body()?.message)
-                    }
-                }))
-        }
+        jasonService?.submitProcess(type, roverFile)
     }
 
     fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) {
-
-        val requestRoverFile =
-            roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
-        val roverPartFile =
-            MultipartBody.Part.createFormData("rover_file", roverFile.name, requestRoverFile)
-
-        val requestBaseFile =
-            roverFile.asRequestBody(getMimeType(baseFile.name)?.toMediaTypeOrNull())
-        val basePartFile =
-            MultipartBody.Part.createFormData("base_file", roverFile.name, requestBaseFile)
-
-        val requestLocation = location.toQueryString().toRequestBody()
-        val secretToken = user?.secretToken!!.toRequestBody()
-        val typePart = type.toRequestBody()
-
-        retrofitInstance?.submitProcess(
-            secretToken,
-            typePart,
-            roverPartFile,
-            basePartFile,
-            requestLocation
-        )
-            ?.enqueue((object : Callback<SubmitProcessResult> {
-
-                override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
-                    Log.e("Submit: ", "error:", t.cause)
-                }
-                override fun onResponse(
-                    call: Call<SubmitProcessResult>,
-                    response: Response<SubmitProcessResult>
-                ) {
-                    Log.d("Response:", response.message())
-                    SubmitProcessResult(response.body()?.id, response.body()?.message)
-                }
-            }))
+        jasonService?.submitProcess(type, roverFile, baseFile, location)
     }
 
     fun registerLogListener(
@@ -176,14 +113,6 @@ class JasonClient {
     private suspend fun getProccessInformation(processId: Int) =
         retrofitInstance?.getProcessInformation(processId, user?.secretToken!!)
 
-    private fun getMimeType(url: String?): String? {
-        var type: String? = null
-        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-        }
-        return type
-    }
 }
 
 
