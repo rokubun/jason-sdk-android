@@ -17,7 +17,7 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 
-class NetworkConnectivity(private val context: Context) : Interceptor{
+class NetworkConnectivityInterceptor(private val context: Context) : Interceptor{
 
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private fun preAndroidMInternetCheck(

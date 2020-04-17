@@ -28,13 +28,13 @@ import java.util.*
 
 
 class JasonClient {
+
     private val DELAY_LOG_REQUEST: Long = 1000L
     private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
     private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
 
     //TODO EXTRACT TO STRING.xml
-    private var URL: String = "http://api-argonaut.rokubun.cat:80/api/"
-    private var API_KEY = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
+
     private var retrofitInstance: ApiService? = null
     private var user: User? = null
     private var logListener: LogListener? = null
@@ -42,9 +42,14 @@ class JasonClient {
     private var serviceFactory: ServiceFactory? = null
 
 
+    companion object {
+        const val URL: String = "http://api-argonaut.rokubun.cat:80/api/"
+        const val API_KEY: String = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
+    }
+
     constructor(context: Context) {
         serviceFactory = ServiceFactory(context)
-        retrofitInstance = serviceFactory!!.getClient(URL, API_KEY)?.create(ApiService::class.java)!!
+        retrofitInstance = serviceFactory!!.getService(Companion.URL, Companion.API_KEY)?.create(ApiService::class.java)!!
     }
     fun login(email: String?, password: String?): Single<User> {
         val map : MutableMap<Int, String> = mutableMapOf<Int, String>()
@@ -79,7 +84,7 @@ class JasonClient {
     }
 
     fun submitProcess(type: String, roverFile: File) {
-        if (user?.secretToken!!.isNotEmpty() && API_KEY.isNotEmpty()) {
+        if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
             var location: Location? = null
 
             val requestFile =
@@ -150,7 +155,7 @@ class JasonClient {
         idProcess: Int,
         timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS
     ) {
-        if (user?.secretToken!!.isNotEmpty() && API_KEY.isNotEmpty()) {
+        if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
         this.logListener = logListener
 
         logRequestJob = CoroutineScope(Dispatchers.IO).launch {
@@ -220,6 +225,7 @@ class JasonClient {
         ERROR(500, "Service is no available")
 
     }
+
 }
 
 
