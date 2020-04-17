@@ -2,10 +2,10 @@ package cat.rokubun.sdk
 
 
 import android.content.Context
-import android.location.Location
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.MutableLiveData
+import cat.rokubun.sdk.domain.Location
 import cat.rokubun.sdk.domain.LoginService
 import cat.rokubun.sdk.domain.User
 import cat.rokubun.sdk.repository.ServiceFactory
@@ -60,7 +60,6 @@ class JasonClient {
 
     fun submitProcess(type: String, roverFile: File) {
         if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
-            var location: Location? = null
 
             val requestFile =
                 roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
@@ -87,7 +86,7 @@ class JasonClient {
         }
     }
 
-    fun submitProcess(type: String, roverFile: File, baseFile: File, location: String) {
+    fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) {
 
         val requestRoverFile =
             roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
@@ -99,7 +98,7 @@ class JasonClient {
         val basePartFile =
             MultipartBody.Part.createFormData("base_file", roverFile.name, requestBaseFile)
 
-        val requestLocation = location.toRequestBody()
+        val requestLocation = location.toQueryString().toRequestBody()
         val secretToken = user?.secretToken!!.toRequestBody()
         val typePart = type.toRequestBody()
 
@@ -175,7 +174,6 @@ class JasonClient {
     }
 
     private suspend fun getProccessInformation(processId: Int) =
-
         retrofitInstance?.getProcessInformation(processId, user?.secretToken!!)
 
     private fun getMimeType(url: String?): String? {

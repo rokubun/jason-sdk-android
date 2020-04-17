@@ -3,7 +3,6 @@ package cat.rokubun.jasonsdk
 
 import android.app.Activity
 import android.content.Intent
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
@@ -19,6 +18,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.FileUtils.getFileName
 import cat.rokubun.sdk.JasonClient
+import cat.rokubun.sdk.domain.Location
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -64,8 +64,7 @@ class SubmitProcessActivity : AppCompatActivity() {
     fun processFile() {
         when {
             fileList.isNotEmpty() -> {
-                val location = "41.418524750001879,1.986951633036511,319.924932730384171"
-
+                val location: Location = Location(41.418524750001879,1.986951633036511,319.924932730384171)
                 jasonClient!!.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
             }
             uploadFile != null -> jasonClient!!.submitProcess("GNSS", uploadFile!!)
