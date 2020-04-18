@@ -11,6 +11,7 @@ import cat.rokubun.sdk.repository.ServiceFactory
 
 import cat.rokubun.sdk.repository.remote.ApiService
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
+import cat.rokubun.sdk.utils.SingletonHolder
 import io.reactivex.Single
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -22,33 +23,30 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-
-class JasonClient {
-
+class JasonClient private constructor(context: Context) {
+    private var jasonService: JasonService? = null
     private val DELAY_LOG_REQUEST: Long = 1000L
     private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
     private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
-
-    //TODO EXTRACT TO STRING.xml
-
     private var retrofitInstance: ApiService? = null
     private var user: User? = null
     private var logListener: LogListener? = null
     private var logRequestJob: Job? = null
     private var serviceFactory: ServiceFactory? = null
 
-    private var jasonService: JasonService? = null
-
-    companion object {
-        const val URL: String = "http://api-argonaut.rokubun.cat:80/api/"
-        const val API_KEY: String = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
-    }
-
-    constructor(context: Context) {
+    init {
+        // Init using context argument
         jasonService = JasonService(context)
         serviceFactory = ServiceFactory(context)
         retrofitInstance = serviceFactory!!.getService(Companion.URL, Companion.API_KEY)?.create(ApiService::class.java)!!
+
     }
+
+    companion object : SingletonHolder<JasonClient, Context>(::JasonClient) {
+        val URL: String = "http://api-argonaut.rokubun.cat:80/api/"
+        val API_KEY: String = "ARGONAUT.BOF.LQIGHJEYRT754651059DJ5UFM59MS93M"
+    }
+
     fun login(email: String?, password: String?): Single<User>? {
         return jasonService?.login(email, password)
     }

@@ -54,7 +54,7 @@ class SubmitProcessActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submit_process)
-        jasonClient = JasonClient(applicationContext)
+        jasonClient = JasonClient.getInstance(applicationContext)
         //jasonClient.init(baseContext)
         ButterKnife.bind(this)
     }

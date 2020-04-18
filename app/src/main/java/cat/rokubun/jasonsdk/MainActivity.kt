@@ -48,8 +48,7 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.CHANGE_WIFI_STATE
         )
         Permissions.checkPermissions(this, requiredPermissions)
-        jasonClient = JasonClient(baseContext)
-        //jasonClient!!.init(baseContext)
+        jasonClient = JasonClient.getInstance(baseContext)
     }
 
     @OnClick(R.id.connectButton)

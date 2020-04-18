@@ -37,8 +37,8 @@ class JasonService {
 
     fun login(user: String?, password: String?): Single<User> {
         return Single.create { emitter ->
-            apiService?.userlogin(user, Hasher.hash(password))
-                ?.enqueue((object : Callback<UserLoginResult> {
+            apiService.userlogin(user, Hasher.hash(password))
+                .enqueue((object : Callback<UserLoginResult> {
                     override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
                         emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
                     }
@@ -57,7 +57,8 @@ class JasonService {
                                     response.body()?.id
                                 )
                                 token = response.body()!!.token
-                                emitter.onSuccess(userResponse!!)
+                                Log.d("DEBUG", "login token = "+token)
+                                emitter.onSuccess(userResponse)
                             }
                             401 -> {
                                 emitter.onError(Throwable(ResponseCodeEum.FORBIDDEN.description))
@@ -71,13 +72,13 @@ class JasonService {
     fun submitProcess(type: String, roverFile: File, baseFile: File? = null, location: Location? = null) {
         val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
         val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
-
+        Log.d("DEBUG", "token " + token)
         val secretToken = token!!.toRequestBody()
         val typePart = type.toRequestBody()
 
         if (baseFile == null) {
-            apiService?.submitProcess(secretToken, typePart, roverPartFile)
-                ?.enqueue(submitProcessCallback)
+            apiService.submitProcess(secretToken, typePart, roverPartFile)
+                .enqueue(submitProcessCallback)
         } else {
             val requestBaseFile =
                 roverFile.asRequestBody(getMimeType(baseFile.name)?.toMediaTypeOrNull())
@@ -85,7 +86,7 @@ class JasonService {
                 MultipartBody.Part.createFormData("base_file", roverFile.name, requestBaseFile)
 
             val requestLocation = location?.toQueryString()?.toRequestBody()
-            apiService?.submitProcess(secretToken,
+            apiService.submitProcess(secretToken,
                 typePart,
                 roverPartFile,
                 basePartFile,
