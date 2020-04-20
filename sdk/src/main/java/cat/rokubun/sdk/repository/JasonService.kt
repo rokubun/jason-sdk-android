@@ -11,6 +11,7 @@ import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.repository.remote.dto.UserLoginResult
 import cat.rokubun.sdk.utils.Hasher
 import io.reactivex.Single
+import io.reactivex.SingleEmitter
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -69,7 +70,7 @@ class JasonService {
         }
     }
 
-    fun submitProcess(type: String, roverFile: File, baseFile: File? = null, location: Location? = null) {
+    fun submitProcess(type: String, roverFile: File, baseFile: File? = null, location: Location? = null): Single<SubmitProcessResult> {
         val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
         val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
         Log.d("DEBUG", "token " + token)
@@ -77,8 +78,13 @@ class JasonService {
         val typePart = type.toRequestBody()
 
         if (baseFile == null) {
-            apiService.submitProcess(secretToken, typePart, roverPartFile)
-                .enqueue(submitProcessCallback)
+           return Single.create{ emiter ->
+               apiService.submitProcess(secretToken, typePart, roverPartFile)
+                   //.enqueue(submitProcessCallback)
+                   .enqueue(submitProcessCallback(emiter))
+
+
+           }
         } else {
             val requestBaseFile =
                 roverFile.asRequestBody(getMimeType(baseFile.name)?.toMediaTypeOrNull())
@@ -86,27 +92,34 @@ class JasonService {
                 MultipartBody.Part.createFormData("base_file", roverFile.name, requestBaseFile)
 
             val requestLocation = location?.toQueryString()?.toRequestBody()
-            apiService.submitProcess(secretToken,
-                typePart,
-                roverPartFile,
-                basePartFile,
-                requestLocation)
-                .enqueue(submitProcessCallback)
+
+            return Single.create { emiter ->
+                apiService.submitProcess(
+                    secretToken,
+                    typePart,
+                    roverPartFile,
+                    basePartFile,
+                    requestLocation
+                )
+                    .enqueue(submitProcessCallback(emiter))
+            }
         }
     }
 
+    private fun submitProcessCallback(emiter: SingleEmitter<SubmitProcessResult>): Callback<SubmitProcessResult> {
+        return object : Callback<SubmitProcessResult> {
+            override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
+                emiter.onError(Throwable(ResponseCodeEum.ERROR.description))
+            }
 
-    object submitProcessCallback : Callback<SubmitProcessResult> {
-        override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
-            Log.e("Submit: ", "error:", t.cause)
-        }
+            override fun onResponse(
+                call: Call<SubmitProcessResult>,
+                response: Response<SubmitProcessResult>
+            ) {
+                Log.d("Response:", response.message())
+                emiter.onSuccess(SubmitProcessResult(response.body()?.id, response.body()?.message))
 
-        override fun onResponse(
-            call: Call<SubmitProcessResult>,
-            response: Response<SubmitProcessResult>
-        ) {
-            Log.d("Response:", response.message())
-            SubmitProcessResult(response.body()?.id, response.body()?.message)
+            }
         }
     }
 

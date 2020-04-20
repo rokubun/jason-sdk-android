@@ -51,12 +51,14 @@ class JasonClient private constructor(context: Context) {
         return jasonService?.login(email, password)
     }
 
-    fun submitProcess(type: String, roverFile: File) {
-        jasonService?.submitProcess(type, roverFile)
+    fun submitProcess(type: String, roverFile: File): Single<SubmitProcessResult> {
+
+        return jasonService!!.submitProcess(type, roverFile)
+
     }
 
-    fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) {
-        jasonService?.submitProcess(type, roverFile, baseFile, location)
+    fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) :Single<SubmitProcessResult> {
+        return jasonService!!.submitProcess(type, roverFile, baseFile, location)
     }
 
     fun registerLogListener(
@@ -64,7 +66,7 @@ class JasonClient private constructor(context: Context) {
         idProcess: Int,
         timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS
     ) {
-        if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
+       if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
         this.logListener = logListener
 
         logRequestJob = CoroutineScope(Dispatchers.IO).launch {
