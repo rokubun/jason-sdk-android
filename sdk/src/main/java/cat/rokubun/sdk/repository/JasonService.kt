@@ -70,20 +70,20 @@ class JasonService {
         }
     }
 
+    fun logout() {
+        token = null
+    }
+
     fun submitProcess(type: String, roverFile: File, baseFile: File? = null, location: Location? = null): Single<SubmitProcessResult> {
         val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
         val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
-        Log.d("DEBUG", "token " + token)
         val secretToken = token!!.toRequestBody()
         val typePart = type.toRequestBody()
 
         if (baseFile == null) {
            return Single.create{ emiter ->
                apiService.submitProcess(secretToken, typePart, roverPartFile)
-                   //.enqueue(submitProcessCallback)
                    .enqueue(submitProcessCallback(emiter))
-
-
            }
         } else {
             val requestBaseFile =
@@ -93,23 +93,17 @@ class JasonService {
 
             val requestLocation = location?.toQueryString()?.toRequestBody()
 
-            return Single.create { emiter ->
-                apiService.submitProcess(
-                    secretToken,
-                    typePart,
-                    roverPartFile,
-                    basePartFile,
-                    requestLocation
-                )
-                    .enqueue(submitProcessCallback(emiter))
+            return Single.create { emitter ->
+                apiService.submitProcess(secretToken, typePart, roverPartFile, basePartFile,requestLocation)
+                    .enqueue(submitProcessCallback(emitter))
             }
         }
     }
 
-    private fun submitProcessCallback(emiter: SingleEmitter<SubmitProcessResult>): Callback<SubmitProcessResult> {
+    private fun submitProcessCallback(emitter: SingleEmitter<SubmitProcessResult>): Callback<SubmitProcessResult> {
         return object : Callback<SubmitProcessResult> {
             override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
-                emiter.onError(Throwable(ResponseCodeEum.ERROR.description))
+                emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
             }
 
             override fun onResponse(
@@ -117,7 +111,7 @@ class JasonService {
                 response: Response<SubmitProcessResult>
             ) {
                 Log.d("Response:", response.message())
-                emiter.onSuccess(SubmitProcessResult(response.body()?.id, response.body()?.message))
+                emitter.onSuccess(SubmitProcessResult(response.body()?.id, response.body()?.message))
 
             }
         }
