@@ -39,6 +39,10 @@ class JasonClient private constructor(context: Context) {
         return jasonService?.login(email, password)
     }
 
+    fun login(token: String?) {
+        jasonService!!.setToken(token)
+    }
+
     fun logout(): Unit? {
         return jasonService?.logout()
     }

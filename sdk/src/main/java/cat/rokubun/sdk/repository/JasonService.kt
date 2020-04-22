@@ -45,6 +45,10 @@ class JasonService {
         )?.create(ApiService::class.java)!!
     }
 
+    fun setToken (token: String?) {
+        this.token = token
+    }
+
     fun login(user: String?, password: String?): Single<User> {
         return Single.create { emitter ->
             apiService.userlogin(user, Hasher.hash(password))
