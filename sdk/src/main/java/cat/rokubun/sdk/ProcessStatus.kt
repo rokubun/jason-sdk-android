@@ -1,6 +1,6 @@
 package cat.rokubun.sdk
 
-class JasonProcess {
+class ProcessStatus {
 
     var processLog :List<ProcessLog> ?= null
     var processResult: ProcessResult ?= null

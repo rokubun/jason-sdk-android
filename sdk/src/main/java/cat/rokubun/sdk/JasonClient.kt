@@ -19,15 +19,10 @@ class JasonClient private constructor(context: Context) {
     private val DELAY_LOG_REQUEST: Long = 1000L
     private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
     private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
-    private var retrofitInstance: ApiService? = null
-    private var serviceFactory: ServiceFactory? = null
 
     init {
         // Init using context argument
         jasonService = JasonService(context)
-        serviceFactory = ServiceFactory(context)
-        retrofitInstance = serviceFactory!!.getService(Companion.URL, Companion.API_KEY)?.create(ApiService::class.java)!!
-
     }
 
     companion object : SingletonHolder<JasonClient, Context>(::JasonClient) {
@@ -55,14 +50,9 @@ class JasonClient private constructor(context: Context) {
         return jasonService!!.submitProcess(type, roverFile, baseFile, location)
     }
     //FIXME NAMING
-    fun registerLogListener(idProcess: Int, timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS): Observable<JasonProcess> {
-        return jasonService!!.registerLogListener(idProcess, timeOutMillis)
+    fun getProcessStatus(processId: Int, maxTimeoutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS): Observable<ProcessStatus> {
+        return jasonService!!.getProcessStatus(processId, maxTimeoutMillis)
     }
-
-    suspend fun unregisterLogListener() {
-        jasonService!!.unregisterLogListener()
-    }
-
 
 }
 

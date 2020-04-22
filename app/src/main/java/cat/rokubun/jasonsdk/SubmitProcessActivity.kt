@@ -13,13 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.FileUtils.getFileName
 import cat.rokubun.sdk.JasonClient
-import cat.rokubun.sdk.JasonProcess
 import cat.rokubun.sdk.domain.Location
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -86,7 +84,7 @@ class SubmitProcessActivity : AppCompatActivity() {
     fun getLogs() {
             val number: Int = processNumber.text.toString().toInt()
             try{
-                jasonClient?.registerLogListener(number)
+                jasonClient?.getProcessStatus(number)
                     ?.subscribeOn(Schedulers.io())
                     ?.observeOn(AndroidSchedulers.mainThread())
                     ?.subscribe ({ it ->
