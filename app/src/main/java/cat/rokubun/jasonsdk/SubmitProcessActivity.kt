@@ -13,13 +13,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.MutableLiveData
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.FileUtils.getFileName
 import cat.rokubun.sdk.JasonClient
+import cat.rokubun.sdk.JasonProcess
 import cat.rokubun.sdk.domain.Location
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
@@ -41,21 +45,15 @@ class SubmitProcessActivity : AppCompatActivity() {
     @BindView(R.id.baseFileTextView)
     lateinit var baseFileNameTextView: TextView
 
-    var logListenerExample  = LogListenerExample()
     private var uploadFile: File? = null
     var fileList: MutableList<File> = mutableListOf<File>()
     private val PICKFILE_RESULT_CODE: Int = 1001
     var jasonClient: JasonClient ?= null
 
-
-    var location: Location? = null
-    private var builder = StringBuilder()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submit_process)
         jasonClient = JasonClient.getInstance(applicationContext)
-        //jasonClient.init(baseContext)
         ButterKnife.bind(this)
     }
 
@@ -88,7 +86,15 @@ class SubmitProcessActivity : AppCompatActivity() {
     fun getLogs() {
             val number: Int = processNumber.text.toString().toInt()
             try{
-                jasonClient?.registerLogListener(logListenerExample, number)
+                jasonClient?.registerLogListener(number)
+                    ?.subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe ({ it ->
+                        if(!it.processLog?.last()?.message.isNullOrEmpty()){
+                            Log.d("CSV: ", it.processLog?.last()?.message)
+                        }
+                    }, Throwable::printStackTrace)
+
             }catch (e: Exception){
                 Log.e("Error: ",  "", e)
             }

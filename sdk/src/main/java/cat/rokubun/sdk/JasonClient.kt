@@ -2,8 +2,6 @@ package cat.rokubun.sdk
 
 
 import android.content.Context
-import android.util.Log
-import android.webkit.MimeTypeMap
 import cat.rokubun.sdk.domain.Location
 import cat.rokubun.sdk.repository.JasonService
 import cat.rokubun.sdk.domain.User
@@ -12,15 +10,8 @@ import cat.rokubun.sdk.repository.ServiceFactory
 import cat.rokubun.sdk.repository.remote.ApiService
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.utils.SingletonHolder
+import io.reactivex.Observable
 import io.reactivex.Single
-import kotlinx.coroutines.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 class JasonClient private constructor(context: Context) {
@@ -29,9 +20,6 @@ class JasonClient private constructor(context: Context) {
     private val MAX_LOG_REQUEST_RETRIES: Int = 5 * 60
     private val MAX_LOG_REQUEST_TIMEOUT_MS: Long = MAX_LOG_REQUEST_RETRIES * DELAY_LOG_REQUEST
     private var retrofitInstance: ApiService? = null
-    private var user: User? = null
-    private var logListener: LogListener? = null
-    private var logRequestJob: Job? = null
     private var serviceFactory: ServiceFactory? = null
 
     init {
@@ -62,58 +50,15 @@ class JasonClient private constructor(context: Context) {
     fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) :Single<SubmitProcessResult> {
         return jasonService!!.submitProcess(type, roverFile, baseFile, location)
     }
-
-    fun registerLogListener(
-        logListener: LogListener,
-        idProcess: Int,
-        timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS
-    ) {
-       if (user?.secretToken!!.isNotEmpty() && Companion.API_KEY.isNotEmpty()) {
-        this.logListener = logListener
-
-        logRequestJob = CoroutineScope(Dispatchers.IO).launch {
-            repeat(MAX_LOG_REQUEST_RETRIES) { i ->
-                try {
-                    val response = getProccessInformation(idProcess)
-                    when (response?.body()?.process?.status) {
-                            "RUNNING" -> {
-                                val processLogList: List<ProcessLog>? =
-                                    ProcessResultConverter.getProcessLogFromStatusResult(
-                                        response.body()!!
-                                    )
-                                logListener.onLogReceived(processLogList!!)
-                                delay(DELAY_LOG_REQUEST)
-                            }
-                            "FINISHED" -> {
-                                val processResult: ProcessResult? =
-                                    ProcessResult(response.body()?.results!!)
-                                logListener.onFinish(processResult!!)
-                                logRequestJob?.join()
-                            }
-                            else -> {
-                                val processError: ProcessError? = ProcessError(response?.code()!!)
-                                Log.e("error", processError?.getErrorMessage(), Throwable())
-                                Log.e("error", response.code().toString())
-                                unregisterLogListener()
-                            }
-                        }
-                    } catch (e: Throwable) {
-                    Log.e("Throwable", "", e)
-                    unregisterLogListener()
-                    }
-
-                }
-            }
-        }
+    //FIXME NAMING
+    fun registerLogListener(idProcess: Int, timeOutMillis: Long = MAX_LOG_REQUEST_TIMEOUT_MS): Observable<JasonProcess> {
+        return jasonService!!.registerLogListener(idProcess, timeOutMillis)
     }
 
     suspend fun unregisterLogListener() {
-        logRequestJob?.cancelAndJoin()
-        logListener = null
+        jasonService!!.unregisterLogListener()
     }
 
-    private suspend fun getProccessInformation(processId: Int) =
-        retrofitInstance?.getProcessInformation(processId, user?.secretToken!!)
 
 }
 
