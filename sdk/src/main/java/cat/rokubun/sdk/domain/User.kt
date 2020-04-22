@@ -8,5 +8,6 @@ data class User(
     var surname: String?,
     var secretToken: String?,
     var email: String?,
-    var id: Int? )
+    var id: Int?,
+    var type: String?)
 

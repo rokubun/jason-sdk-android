@@ -68,10 +68,10 @@ class JasonService {
                                     response.body()?.surname,
                                     response.body()!!.token,
                                     response.body()?.email,
-                                    response.body()?.id
+                                    response.body()?.id,
+                                    response.body()?.type
                                 )
                                 token = response.body()!!.token
-                                Log.d("DEBUG", "login token = "+token)
                                 emitter.onSuccess(userResponse)
                             }
                             401 -> {
