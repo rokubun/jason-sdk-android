@@ -1,15 +1,8 @@
 package cat.rokubun.sdk.utils
 
-import android.R
-import android.app.ProgressDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
-import android.os.Build
-import android.util.EventLogTags
-import android.view.View
-import androidx.core.content.ContextCompat.getSystemService
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

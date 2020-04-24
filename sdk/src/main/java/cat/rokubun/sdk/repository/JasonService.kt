@@ -1,7 +1,6 @@
 package cat.rokubun.sdk.repository
 
 import android.content.Context
-import android.util.Log
 import android.webkit.MimeTypeMap
 import cat.rokubun.sdk.*
 import cat.rokubun.sdk.domain.Location
@@ -151,7 +150,6 @@ class JasonService {
                 call: Call<SubmitProcessResult>,
                 response: Response<SubmitProcessResult>
             ) {
-                Log.d("Response:", response.message())
                 emitter.onSuccess(SubmitProcessResult(response.body()?.id, response.body()?.message))
 
             }
@@ -200,7 +198,6 @@ class JasonService {
                             }
                         }
                     } catch (e: Throwable) {
-                        Log.e("Throwable", "", e)
                         logRequestJob?.cancelAndJoin()
                         emiter.onError(Throwable(ResponseCodeEum.ERROR.description))
                     }

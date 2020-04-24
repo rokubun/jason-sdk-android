@@ -1,7 +1,5 @@
 package cat.rokubun.sdk.repository.remote.dto
 
-import java.util.*
-
 
 /*
 {

@@ -3,11 +3,7 @@ package cat.rokubun.sdk
 
 import android.content.Context
 import cat.rokubun.sdk.domain.Location
-import cat.rokubun.sdk.repository.JasonService
 import cat.rokubun.sdk.domain.User
-import cat.rokubun.sdk.repository.ServiceFactory
-
-import cat.rokubun.sdk.repository.remote.ApiService
 import cat.rokubun.sdk.repository.JasonService
 import cat.rokubun.sdk.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.sdk.utils.SingletonHolder

@@ -1,8 +1,5 @@
 package cat.rokubun.sdk
 
-import okhttp3.internal.http2.Http2
-import okhttp3.internal.http2.Http2Connection
-
 /**
  * Contains error messages that return API requests
  * @constructor http code response
