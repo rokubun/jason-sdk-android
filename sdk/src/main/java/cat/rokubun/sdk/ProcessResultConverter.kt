@@ -4,8 +4,12 @@ import cat.rokubun.sdk.repository.remote.dto.ProcessStatusResult
 
 object ProcessResultConverter {
 
-    var processLogList =  mutableListOf<ProcessLog>()
+    private var processLogList =  mutableListOf<ProcessLog>()
 
+    /**
+     * Transforms response values from [StatusResult] to a list
+     *
+     */
     fun getProcessLogFromStatusResult(processStatusResult: ProcessStatusResult): List<ProcessLog>{
 
         for(result in processStatusResult.log){

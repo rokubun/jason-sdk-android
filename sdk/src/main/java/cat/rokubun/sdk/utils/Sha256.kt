@@ -2,6 +2,9 @@ package cat.rokubun.sdk.utils
 
 import java.security.MessageDigest
 
+/**
+ * SHA-256 hasher
+ */
 object Hasher {
     fun hash(text: String?): String {
         val bytes = text?.toByteArray()

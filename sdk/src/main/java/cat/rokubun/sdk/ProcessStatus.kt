@@ -1,5 +1,9 @@
 package cat.rokubun.sdk
 
+/**
+ * Contains the result of the processes that are emitted every time
+ * [JasonClient.getProcessStatus] is called.
+ */
 class ProcessStatus {
 
     var processLog :List<ProcessLog> ?= null

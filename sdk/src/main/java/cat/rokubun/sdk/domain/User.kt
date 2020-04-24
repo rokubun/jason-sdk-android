@@ -1,6 +1,14 @@
 package cat.rokubun.sdk.domain
 
-
+/**
+ *  User information
+ *  @property name user name
+ *  @property surname user surname
+ *  @property secretToken user token
+ *  @property email user email
+ *  @property id user  ID
+ *  @property type user type
+ * */
 
 
 data class User(

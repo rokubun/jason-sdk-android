@@ -2,27 +2,29 @@ package cat.rokubun.sdk
 
 import cat.rokubun.sdk.repository.remote.dto.ResultsResponse
 
-class ProcessResult(val listResultsResponse: List<ResultsResponse>){
-/*
-result.getNumSattelitesUrlPng()
-result.getSppKmlUrl
-result.getSppCsvUrl
-result.getPreciseCsvUrl
-result.getpreciseKmlUrl
-result.isStatic
-result.result.getStaticPosition
-result.getProcessingType = SPP, PPP, PPK
-result.getNumEpochs()
+/**
+ * This class returns information from the processed file
+ * @param listResultsResponse list of [ResultsResponse]
  */
 
+class ProcessResult(val listResultsResponse: List<ResultsResponse>){
+
+    /**
+     * return spp KMl url
+     */
     fun getSppKmlUrl(): String {
         val sppKmlUrl = listResultsResponse.filter{ it.name.contains("_position_spp.kml")}
         return sppKmlUrl.last().url
     }
+
+    /**
+     * return spp CSV URL
+     */
     fun getSppCsvUrl(): String{
         val sppCsvUrl = listResultsResponse.singleOrNull { it.name.contains("_position_spp.csv") }
         return sppCsvUrl!!.url
     }
+
 
     //TODO
     fun getPreciseCsvUrl() : Double{

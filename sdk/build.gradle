@@ -70,4 +70,20 @@ dependencies {
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/dokka"
+    configuration{
+        moduleName = 'sdk'
+        for (String docUrl : ["https://d.android.com/reference/",
+                              "http://reactivex.io/RxJava/javadoc/",
+                              "https://square.github.io/retrofit/2.x/retrofit/",
+                              "https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.7/okhttp3/"
+
+        ]) {
+            externalDocumentationLink {
+                // Root URL of the generated documentation to link with. The trailing slash is required!
+                url = new URL(docUrl)
+                // If package-list file located in non-standard location
+                packageListUrl = new URL("${docUrl}package-list")
+            }
+        }
+    }
 }

@@ -2,6 +2,9 @@ package cat.rokubun.sdk.domain
 
 import java.util.*
 
+/**
+ * Location coordinates
+ * */
 data class Location (
     val latitude: Double,
     val longitude: Double,

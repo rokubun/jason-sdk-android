@@ -17,6 +17,10 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 
+/**
+ * Is responsible for checking if the device has an internet connection
+ *
+ */
 class NetworkConnectivityInterceptor(private val context: Context) : Interceptor{
 
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
