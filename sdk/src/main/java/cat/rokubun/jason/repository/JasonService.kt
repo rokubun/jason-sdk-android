@@ -47,7 +47,7 @@ class JasonService {
     }
 
     /**
-     * Insert user token for request
+     * Insert user token for every request
      */
     fun setToken (token: String?) {
         this.token = token
@@ -55,7 +55,7 @@ class JasonService {
 
     /**
      *
-     * A login request is made, and emit a Single<User>, also errors are handled
+     * Perform login in request and emit a Single<User>. Errors are provided on the OnError method
      * @param user user's email
      * @param password user's password
      * @return if login is correct Single<User>
@@ -96,14 +96,14 @@ class JasonService {
     }
 
     /**
-     * Eliminate user token
+     * Logout user from Jason by removing token
      */
     fun logout() {
         token = null
     }
 
     /**
-     *A file is sent to the api by retrofit to process it, the responses are parsed and emited
+     * Sent file to JASON in order process it, the responses are parsed and emitted
      *
      * @param type of processing to be performed
      * @param roverFile rover file to process
@@ -157,9 +157,9 @@ class JasonService {
     }
 
     /**
-     * It is a coroutine that is responsible for collecting and emitting the records that are made
-     * when a file is processed, if the state is "RUNNING"  requests will be made every second,
-     * if "FINISHED" all the generated logs are returned.
+     * Requests periodically the status of the process id passed as parameter. If the state is "RUNNING" ,
+     * requests are made every second. When the status is FINISHED or and ERROR is returned, the requests
+     * are stopped
      *
      * @param processId process ID
      * @param maxTimeoutMillis time to wait for a server respond

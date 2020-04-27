@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ServiceFactory(private val context: Context) {
     var retrofit: Retrofit? = null
     /**
-     * Se encarga de realizar peticiones HTTP
+     * Provides the Jason Services based on the url and api key passed as parameter
      * @param baseUrl url for the API request
      * @param apiKey for the request
      * @return An implementation of the given Rest API
@@ -45,7 +45,7 @@ class ServiceFactory(private val context: Context) {
     }
 
     /**
-     * Add the API KEY to header on the request
+     * Adds the API KEY to header on the request
      * @param apiKey for the request
      * @return interceptor whith added header
      */

@@ -1,7 +1,7 @@
 package cat.rokubun.jason
 
 /**
- * Contains the result of the processes that are emitted every time
+ * Contains the result of the processes that are emitted every periodically
  * [JasonClient.getProcessStatus] is called.
  */
 class ProcessStatus {
