@@ -3,19 +3,16 @@ package cat.rokubun.jasonsdk
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.Permissions
-import cat.rokubun.sdk.JasonClient
-import cat.rokubun.sdk.domain.User
+import cat.rokubun.jason.JasonClient
+import cat.rokubun.jason.domain.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

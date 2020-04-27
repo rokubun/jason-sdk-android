@@ -1,12 +1,10 @@
 package cat.rokubun.jasonsdk
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import cat.rokubun.sdk.LogListener
-import cat.rokubun.sdk.ProcessError
-import cat.rokubun.sdk.ProcessLog
-import cat.rokubun.sdk.ProcessResult
-import cat.rokubun.sdk.repository.remote.dto.ResultsResponse
+import cat.rokubun.jason.LogListener
+import cat.rokubun.jason.ProcessError
+import cat.rokubun.jason.ProcessLog
+import cat.rokubun.jason.ProcessResult
 
 class LogListenerExample: LogListener {
 

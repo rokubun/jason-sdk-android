@@ -17,8 +17,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.FileUtils.getFileName
-import cat.rokubun.sdk.JasonClient
-import cat.rokubun.sdk.domain.Location
+import cat.rokubun.jason.JasonClient
+import cat.rokubun.jason.domain.Location
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
