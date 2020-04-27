@@ -1,16 +1,7 @@
 package cat.rokubun.jason.repository.remote.dto
 
-
-/*
-{
-  "id": 237,
-  "email": "eduardo.paredes@rokubun.cat",
-  "name": "",
-  "surname": "",
-  "created": "2020-03-18 14:01:31",
-  "type": "REGULAR",
-  "token": "5e722ca51e0227.98066014"
-}
+/**
+ * User login response.
  */
 data class UserLoginResult(
     val id: Int,
