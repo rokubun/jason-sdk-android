@@ -1,4 +1,4 @@
-package cat.rokubun.jason.domain
+package cat.rokubun.jason
 
 /**
  *  User information

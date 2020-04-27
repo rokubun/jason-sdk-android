@@ -12,7 +12,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import cat.rokubun.jasonsdk.utlis.Permissions
 import cat.rokubun.jason.JasonClient
-import cat.rokubun.jason.domain.User
+import cat.rokubun.jason.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

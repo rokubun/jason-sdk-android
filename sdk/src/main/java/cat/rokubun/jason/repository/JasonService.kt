@@ -3,8 +3,8 @@ package cat.rokubun.jason.repository
 import android.content.Context
 import android.webkit.MimeTypeMap
 import cat.rokubun.jason.*
-import cat.rokubun.jason.domain.Location
-import cat.rokubun.jason.domain.User
+import cat.rokubun.jason.Location
+import cat.rokubun.jason.User
 import cat.rokubun.jason.repository.remote.ApiService
 import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.jason.repository.remote.dto.UserLoginResult

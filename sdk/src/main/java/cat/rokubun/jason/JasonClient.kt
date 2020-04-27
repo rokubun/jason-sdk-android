@@ -2,8 +2,6 @@ package cat.rokubun.jason
 
 
 import android.content.Context
-import cat.rokubun.jason.domain.Location
-import cat.rokubun.jason.domain.User
 import cat.rokubun.jason.repository.JasonService
 import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.jason.utils.SingletonHolder
@@ -13,7 +11,7 @@ import okhttp3.MultipartBody
 import java.io.File
 
 /**
- * JasonClient class is responsible for making calls to JASON related services
+ * JasonClient is responsible for communicating with JASON related services
  * @see Single
  * @see Observable
  * @see MultipartBody
@@ -31,7 +29,7 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
-     * Create a singleton JasonClient object
+     * Provides a JasonClient singleton.
      * @param JasonClient
      * @param Context
      * @property URL base URL for request
@@ -44,7 +42,7 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
-     * Make the Login process to Jason and return a Single<User> object.
+     * Perform the Login process to Jason and return a Single<User> object.
      * @param email user's email
      * @param password  user's password
      * @return Single<[User]>
@@ -54,7 +52,7 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
-     * Set token in JasonService.
+     * Set token instead of retrieving it with the login.
      * @param token user's token
      */
     fun login(token: String?) {
@@ -62,16 +60,20 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
-     * Delete token asociated to the user.
+     * Logout from JASOn by removing the token associated to the user.
      */
     fun logout(): Unit? {
         return jasonService?.logout()
     }
 
     /**
-     *Send a rovert file to be processed in Jason and return a Single <SubmitProcessResult>
+     * Perform a PPK processing with JASON specifying a Rover file and returns a
+     * Single<SubmitProcessResult>
+     * Compatible files are Argounaut, Ublox, Septentrio, Rinex 2/3 devices and
+     * Android GnssLogger, GPS_Test and GalileoPVT applications
+     *
      * @param type of process to be performed {@sample GNSS, CONVERTER}
-     * @param roverFile
+     * @param roverFile Input file to be send to Jason
      * @return Single<[SubmitProcessResult]>
      */
     fun submitProcess(type: String, roverFile: File): Single<SubmitProcessResult> {
@@ -81,6 +83,8 @@ class JasonClient private constructor(context: Context) {
     /**
      * Perform a PPK processing specifying a rover, base file as well as the location of the base
      * station and return a Single <SubmitProcessResult>
+     * Compatible files are Argounaut, Ublox, Septentrio, Rinex 2/3 devices and
+     * Android GnssLogger, GPS_Test and GalileoPVT applications
      * @param type of process to be performed {@sample GNSS, CONVERTER}
      * @param roverFile
      * @param baseFile
@@ -92,7 +96,8 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
-     * Get the logs that are made when the process is running or have been run
+     * Get process status with the log and the results. The Observable will be updated every one
+     * second until the processing finishes, either successful or with an error.
      * @param processId process ID
      * @param maxTimeoutMillis time to wait for a server respond
      *
