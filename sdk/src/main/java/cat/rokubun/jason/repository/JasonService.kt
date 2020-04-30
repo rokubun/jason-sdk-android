@@ -150,7 +150,7 @@ class JasonService {
                 call: Call<SubmitProcessResult>,
                 response: Response<SubmitProcessResult>
             ) {
-                emitter.onSuccess(SubmitProcessResult(response.body()?.id, response.body()?.message))
+                emitter.onSuccess(SubmitProcessResult(response.body()?.message, response.body()?.id))
 
             }
         }
@@ -176,6 +176,7 @@ class JasonService {
                     try {
                         val response = getProcessInformation(processId)
                         when (response?.body()?.process?.status) {
+                            "PENDING" -> delay(DELAY_LOG_REQUEST)
                             "RUNNING" -> {
                                 processLogList = ProcessResultConverter.getProcessLogFromStatusResult(response.body()!!)
                                 processStatus = ProcessStatus(processLogList!!)
