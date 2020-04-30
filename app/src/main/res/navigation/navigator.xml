@@ -5,7 +5,6 @@
     app:startDestination="@id/loginFragment"
     tools:ignore="UnusedNavigation">
 
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="cat.rokubun.jasonsdk.LoginFragment"
@@ -13,7 +12,9 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_to_submit"
-            app:destination="@+id/submitProcessFragment">
+            app:destination="@+id/submitProcessFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true">
         </action>
     </fragment>
 
@@ -22,6 +23,39 @@
         android:name="cat.rokubun.jasonsdk.SubmitProcessFragment"
         android:label="fragment_submit_process"
         tools:layout="@layout/fragment_submit_process" >
+        <action
+            android:id="@+id/action_submit_to_logs"
+            app:destination="@+id/logFrament">
+            <argument
+                android:name="idProcess"
+                app:argType="string" />
+        </action>
     </fragment>
 
+    <fragment
+        android:id="@+id/logFrament"
+        android:name="cat.rokubun.jasonsdk.LogFrament"
+        android:label="fragment_log_frament"
+        tools:layout="@layout/fragment_log_process">
+        <argument
+            android:name="idProcess"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_logFrament_to_resultProcessFragament"
+            app:destination="@id/resultProcessFragament">
+            <argument
+                android:name="idProcess"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultProcessFragament"
+        android:name="cat.rokubun.jasonsdk.ResultProcessFragament"
+        android:label="fragment_result_process"
+        tools:layout="@layout/fragment_result_process" >
+        <argument
+            android:name="idProcess"
+            app:argType="string" />
+    </fragment>
 </navigation>

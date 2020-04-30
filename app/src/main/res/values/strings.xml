@@ -3,4 +3,18 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="process_status">Process Status</string>
+    <string name="results">Results</string>
+    <string name="sky_plot_url">Sky plot Url:</string>
+    <string name="process_type">Process Type</string>
+    <string name="spp_csv_url">SPP csv Url</string>
+    <string name="process_results">Process Results</string>
+    <string name="spp_kml_url">SPP Kml Url:</string>
+    <string name="upload_process">Upload Process</string>
+    <string name="file">File:</string>
+    <string name="select_file">Select File</string>
+    <string name="process">Process</string>
 </resources>
