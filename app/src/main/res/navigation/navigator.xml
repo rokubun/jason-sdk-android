@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/loginFragment"
+    tools:ignore="UnusedNavigation">
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="cat.rokubun.jasonsdk.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_submit"
+            app:destination="@+id/submitProcessFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/submitProcessFragment"
+        android:name="cat.rokubun.jasonsdk.SubmitProcessFragment"
+        android:label="fragment_submit_process"
+        tools:layout="@layout/fragment_submit_process" >
+    </fragment>
+
+</navigation>

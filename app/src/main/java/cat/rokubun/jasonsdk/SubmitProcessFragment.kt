@@ -5,20 +5,30 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import cat.rokubun.jasonsdk.utlis.FileUtils.getFileName
 import cat.rokubun.jason.JasonClient
 import cat.rokubun.jason.Location
+import cat.rokubun.jasonsdk.utlis.FileUtils
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,33 +38,35 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 
-class SubmitProcessActivity : AppCompatActivity() {
+class SubmitProcessFragment : Fragment() {
 
     @BindView(R.id.process_button)
     lateinit var processButton: Button
-    @BindView(R.id.Logbutton)
-    lateinit var logButton: Button
-    @BindView(R.id.processEditText)
-    lateinit var processNumber: EditText
-    @BindView(R.id.upload_action_button)
-    lateinit var uploadButton: FloatingActionButton
+    @BindView(R.id.selectFileButton)
+    lateinit var uploadButton: Button
     @BindView(R.id.roverFileNameTextView)
     lateinit var roverFileNameTextView: TextView
     @BindView(R.id.baseFileTextView)
     lateinit var baseFileNameTextView: TextView
+    @BindView(R.id.baseTitle)
+    lateinit var baseTile: TextView
 
     private var uploadFile: File? = null
     var fileList: MutableList<File> = mutableListOf<File>()
     private val PICKFILE_RESULT_CODE: Int = 1001
-    var jasonClient: JasonClient ?= null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_submit_process)
-        jasonClient = JasonClient.getInstance(applicationContext)
-        ButterKnife.bind(this)
+    var fileUtils: FileUtils? = null
+    private val processViewModel: ProcessViewModel by lazy {
+        ViewModelProvider(this).get(ProcessViewModel::class.java)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        fileUtils  = FileUtils(this.context!!)
+        val view: View = inflater.inflate(R.layout.fragment_submit_process, container, false)
+        ButterKnife.bind(this, view)
+        return view
+    }
 
     @OnClick(R.id.process_button)
     fun processFile() {
@@ -66,15 +78,15 @@ class SubmitProcessActivity : AppCompatActivity() {
                         1.986951633036511,
                         319.924932730384171
                     )
-                jasonClient!!.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
+                processViewModel.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
             }
-            uploadFile != null -> jasonClient!!.submitProcess("GNSS", uploadFile!!)
-
-            else -> Toast.makeText(baseContext, "Please choose a file to process", Toast.LENGTH_SHORT).show()
+            uploadFile != null -> processViewModel.submitProcess("GNSS", uploadFile!!)
+            else -> Toast.makeText(context, "Please choose a file to process", Toast.LENGTH_SHORT).show()
         }
     }
 
-    @OnClick(R.id.upload_action_button)
+
+    @OnClick(R.id.selectFileButton)
     fun uploadFile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
             .addCategory(Intent.CATEGORY_OPENABLE)
@@ -82,25 +94,6 @@ class SubmitProcessActivity : AppCompatActivity() {
             .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 
         startActivityForResult(Intent.createChooser(intent,"Files"), PICKFILE_RESULT_CODE)
-
-    }
-
-    @OnClick(R.id.Logbutton)
-    fun getLogs() {
-            val number: Int = processNumber.text.toString().toInt()
-            try{
-                jasonClient?.getProcessStatus(number)
-                    ?.subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe ({ it ->
-                        if(!it.processLog?.last()?.message.isNullOrEmpty()){
-                            Log.d("CSV: ", it.processLog?.last()?.message)
-                        }
-                    }, Throwable::printStackTrace)
-
-            }catch (e: Exception){
-                Log.e("Error: ",  "", e)
-            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -111,36 +104,47 @@ class SubmitProcessActivity : AppCompatActivity() {
                     for ( i in 0 until data.clipData!!.itemCount) {
                         val fileUri = data.clipData?.getItemAt(i)?.uri!!
                         val parcelFileDescriptor =
-                            baseContext.contentResolver.openFileDescriptor(fileUri, "r", null)
+                            context!!.contentResolver.openFileDescriptor(fileUri, "r", null)
                         createTmpFile(parcelFileDescriptor, fileUri)
                         fileList.add(uploadFile!!)
                     }
-                    roverFileNameTextView.text =  getFileName(fileList.get(0).toUri())
-                    baseFileNameTextView.text = getFileName(fileList.get(1).toUri())
+                    setFileNameTextView()
+
                 }else{
+                    roverFileNameTextView.text = fileUtils?.getFileName(data!!.data)
                     val parcelFileDescriptor =
-                        baseContext.contentResolver.openFileDescriptor(data?.data!!, "r", null)
+                        context!!.contentResolver.openFileDescriptor(data?.data!!, "r", null)
                     createTmpFile(parcelFileDescriptor, data.data!!)
                 }
             }
         }
 
     }
-    fun Intent.getData(key: String): String {
-        return extras?.getString(key) ?: "intent is null"
+
+    private fun setFileNameTextView() {
+        roverFileNameTextView.text = fileUtils?.getFileName(fileList.get(1).toUri())
+        baseFileNameTextView.text = fileUtils?.getFileName(fileList.get(0).toUri())
+        baseFileNameTextView.visibility = View.VISIBLE
+        baseTile.visibility = View.VISIBLE
     }
-    private fun SubmitProcessActivity.createTmpFile(
+
+    private fun SubmitProcessFragment.createTmpFile(
         parcelFileDescriptor: ParcelFileDescriptor?,
         fileUri: Uri
     ) {
         parcelFileDescriptor?.let {
             val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-            uploadFile = File(baseContext.cacheDir, getFileName(fileUri))
+            uploadFile = File(context?.cacheDir, fileUtils?.getFileName(fileUri))
             val outputStream = FileOutputStream(uploadFile)
             IOUtils.copy(inputStream, outputStream)
         }
     }
+
+
+
 }
+
+
 
 
 

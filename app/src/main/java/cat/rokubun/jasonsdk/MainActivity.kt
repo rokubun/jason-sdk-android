@@ -1,24 +1,12 @@
 package cat.rokubun.jasonsdk
 
-import android.Manifest
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import cat.rokubun.jasonsdk.utlis.Permissions
-import cat.rokubun.jason.JasonClient
-import cat.rokubun.jason.User
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
-
+/*
     @BindView(R.id.connectButton)
     lateinit var connect: Button
     @BindView(R.id.passwordEditText)
@@ -86,6 +74,14 @@ class MainActivity : AppCompatActivity() {
         return valid
     }
 
+*/
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
 
 }
 
