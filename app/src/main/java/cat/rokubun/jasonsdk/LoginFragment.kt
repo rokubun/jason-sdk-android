@@ -71,10 +71,10 @@ class LoginFragment : Fragment() {
 
     @OnClick(R.id.connectButton)
     fun login() {
-        //if (validate()) {
+        if (validate()) {
             email = userEditText.text.toString()
             password = passwordEditText.text.toString()
-            processViewModel.loginToJason("eduardo.paredes@rokubun.cat", "rootccio")
+            processViewModel.loginToJason(email!!, password!!)
             processViewModel.userLiveData.observe(this, Observer {
                 if (it.secretToken.equals("")) {
                     Toast.makeText(context, "Can not connect", Toast.LENGTH_SHORT).show()
@@ -83,7 +83,7 @@ class LoginFragment : Fragment() {
                     Navigation.findNavController(this.view!!).navigate(R.id.action_login_to_submit)
                 }
             })
-
+        }
     }
 
     private fun validate():Boolean{

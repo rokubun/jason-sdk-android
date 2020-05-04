@@ -60,7 +60,7 @@ class SubmitProcessFragment : Fragment() {
 
     @OnClick(R.id.process_button)
     fun processFile() {
-         /*when {
+         when {
              fileList.isNotEmpty() -> {
                  val location: Location =
                      Location(
@@ -72,10 +72,8 @@ class SubmitProcessFragment : Fragment() {
              }
              uploadFile != null -> processViewModel.submitProcess("GNSS", uploadFile!!)
              else -> Toast.makeText(context, "Please choose a file to process", Toast.LENGTH_SHORT).show()
-         }*/
-         //submitVerification()
-        val action = SubmitProcessFragmentDirections.actionSubmitToLogs("3830")
-        Navigation.findNavController(this.view!!).navigate(action)
+         }
+         submitVerification()
     }
 
     private fun submitVerification() {
@@ -142,8 +140,6 @@ class SubmitProcessFragment : Fragment() {
             IOUtils.copy(inputStream, outputStream)
         }
     }
-
-
 
 }
 

@@ -53,11 +53,6 @@ class ResultProcessFragament : Fragment() {
 
         processViewModel.getProcessStatus(args.idProcess, 1000)
         processViewModel.processResultLivedata.observe(viewLifecycleOwner, Observer {
-            Log.d("spp",it.processResult!!.getSppCsvUrl())
-            Log.d("spp",it.processResult!!.getSppKmlUrl())
-            Log.d("type",it.processResult!!.getProcessingType())
-            Log.d("sky",it.processResult!!.getSkyPlotUrl())
-
             sppCsvUrl.text = it.processResult!!.getSppCsvUrl()
             sppKmlUrl.text = it.processResult!!.getSppKmlUrl()
             processType.text = it.processResult!!.getProcessingType()
