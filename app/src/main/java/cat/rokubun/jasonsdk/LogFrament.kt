@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 import androidx.navigation.fragment.navArgs as navArgs
 
 /**
- * A simple [Fragment] subclass.
+ * Show process Logs
  */
 class LogFrament : Fragment() {
 

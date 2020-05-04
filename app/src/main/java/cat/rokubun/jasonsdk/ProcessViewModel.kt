@@ -14,6 +14,9 @@ import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 
+/**
+ * View Model for [JasonClient] feature.
+ */
 class ProcessViewModel(application: Application) : AndroidViewModel(application) {
 
 

@@ -6,6 +6,10 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import java.io.File
 
+/**
+ * Auxiliary File class
+ */
+
 class FileUtils (val context: Context){
 
     fun getFileName(uri: Uri?): String?

@@ -6,6 +6,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.util.*
 
+/**
+ * Permissions management
+ */
 object Permissions {
     private const val REQUEST_CODE_ASK_PERMISSIONS = 1
     fun checkPermissions(

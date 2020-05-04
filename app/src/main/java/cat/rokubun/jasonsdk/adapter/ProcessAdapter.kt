@@ -11,6 +11,9 @@ import butterknife.ButterKnife
 import cat.rokubun.jason.ProcessLog
 import cat.rokubun.jasonsdk.R
 
+/**
+ * Adapter for the process logs
+ */
 class ProcessAdapter(private val processLog: ArrayList<ProcessLog>): RecyclerView.Adapter<ProcessAdapter.ProcessLogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessLogViewHolder {

@@ -14,7 +14,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 
 /**
- * A simple [Fragment] subclass.
+ * Show some Process results
  */
 class ResultProcessFragament : Fragment() {
 

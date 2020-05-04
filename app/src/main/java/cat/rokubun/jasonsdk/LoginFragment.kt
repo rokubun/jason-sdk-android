@@ -28,7 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
- * A simple [Fragment] subclass.
+ * Login to Jason
  */
 class LoginFragment : Fragment() {
     @BindView(R.id.connectButton)
