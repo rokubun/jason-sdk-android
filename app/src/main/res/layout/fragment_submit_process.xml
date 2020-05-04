@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".SubmitProcessFragment">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
+        android:id="@+id/materialTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -17,13 +18,14 @@
         android:text="@string/upload_process"
         android:textAlignment="center"
         android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/jasonLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
-    </com.google.android.material.textview.MaterialTextView>
+    </TextView>
 
     <TextView
         android:id="@+id/rovertitle"
@@ -43,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@+id/roverFileNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"></TextView>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/baseTitle"
@@ -63,7 +65,7 @@
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/baseFileTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></TextView>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/selectFileButton"
@@ -110,15 +112,28 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
-        android:text=""
         android:visibility="gone"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/selectFileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roverFileNameTextView" />
+
+    <ImageView
+        android:id="@+id/jasonLogo"
+        android:layout_width="295dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/jason_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
