@@ -111,15 +111,17 @@ class JasonService {
      * @param location of the base station
      * @return Single<SubmitProcessResult>
      */
-    fun submitProcess(type: String, roverFile: File, baseFile: File? = null, location: Location? = null): Single<SubmitProcessResult> {
+    //TODO label
+    fun submitProcess(label: String, type: String, roverFile: File, baseFile: File? = null, location: Location? = null): Single<SubmitProcessResult> {
         val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
         val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
         val secretToken = token!!.toRequestBody()
         val typePart = type.toRequestBody()
+        val labelPart = label.toRequestBody()
 
         if (baseFile == null) {
            return Single.create{ emiter ->
-               apiService.submitProcess(secretToken, typePart, roverPartFile)
+               apiService.submitProcess(labelPart, secretToken, typePart, roverPartFile)
                    .enqueue(submitProcessCallback(emiter))
            }
         } else {
@@ -131,7 +133,7 @@ class JasonService {
             val requestLocation = location?.toQueryString()?.toRequestBody()
 
             return Single.create { emitter ->
-                apiService.submitProcess(secretToken, typePart, roverPartFile, basePartFile,requestLocation)
+                apiService.submitProcess(labelPart, secretToken, typePart, roverPartFile, basePartFile,requestLocation)
                     .enqueue(submitProcessCallback(emitter))
             }
         }

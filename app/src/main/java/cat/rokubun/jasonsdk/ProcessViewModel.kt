@@ -34,16 +34,16 @@ class ProcessViewModel(application: Application) : AndroidViewModel(application)
     }
 
 
-    fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) {
-        compositeDisposable!!.add(jasonClient?.submitProcess(type, roverFile, baseFile, location)?.toObservable()?.subscribe({
+    fun submitProcess(label: String, type: String, roverFile: File, baseFile: File, location: Location) {
+        compositeDisposable!!.add(jasonClient?.submitProcess(label, type, roverFile, baseFile, location)?.toObservable()?.subscribe({
             submitLiveData.postValue(it)
         },
             { Throwable(it.message) })!!)
     }
 
-    fun submitProcess(type: String, roverFile: File) {
+    fun submitProcess(label: String, type: String, roverFile: File) {
       compositeDisposable!!.add(
-          jasonClient?.submitProcess(type, roverFile)?.toObservable()?.subscribe({
+          jasonClient?.submitProcess(label, type, roverFile)?.toObservable()?.subscribe({
               submitLiveData.postValue(it)
           },
               { Throwable(it.message) })!!

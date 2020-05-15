@@ -70,9 +70,9 @@ class SubmitProcessFragment : Fragment() {
                          1.986951633036511,
                          319.924932730384171
                      )
-                 processViewModel.submitProcess("GNSS", fileList.get(0), fileList.get(1), location)
+                 processViewModel.submitProcess("Label","GNSS", fileList.get(0), fileList.get(1), location)
              }
-             uploadFile != null -> processViewModel.submitProcess("GNSS", uploadFile!!)
+             uploadFile != null -> processViewModel.submitProcess("Label","GNSS", uploadFile!!)
              else -> Toast.makeText(context, "Please choose a file to process", Toast.LENGTH_SHORT).show()
          }
          submitVerification()

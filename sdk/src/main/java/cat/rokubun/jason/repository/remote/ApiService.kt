@@ -25,12 +25,14 @@ interface ApiService {
 
     @Multipart
     @POST("processes/")
-    fun submitProcess(@Part ("token") token: RequestBody,
+    fun submitProcess(@Part ("label") label : RequestBody,
+                      @Part ("token") token: RequestBody,
                       @Part ("type") type: RequestBody,
                       @Part rover_file: MultipartBody.Part): Call<SubmitProcessResult>
     @Multipart
     @POST("processes/")
-    fun submitProcess(@Part ("token") token: RequestBody,
+    fun submitProcess(@Part ("label") label : RequestBody,
+                      @Part ("token") token: RequestBody,
                       @Part ("type") type: RequestBody,
                       @Part rover_file: MultipartBody.Part,
                       @Part base_file: MultipartBody.Part,

@@ -76,8 +76,8 @@ class JasonClient private constructor(context: Context) {
      * @param roverFile Input file to be send to Jason
      * @return Single<[SubmitProcessResult]>
      */
-    fun submitProcess(type: String, roverFile: File): Single<SubmitProcessResult> {
-        return jasonService!!.submitProcess(type, roverFile)
+    fun submitProcess(label: String, type: String, roverFile: File): Single<SubmitProcessResult> {
+        return jasonService!!.submitProcess(label, type, roverFile)
     }
 
     /**
@@ -91,8 +91,8 @@ class JasonClient private constructor(context: Context) {
      * @param location
      * @return Single<[SubmitProcessResult]> which is the API response
      */
-    fun submitProcess(type: String, roverFile: File, baseFile: File, location: Location) :Single<SubmitProcessResult> {
-        return jasonService!!.submitProcess(type, roverFile, baseFile, location)
+    fun submitProcess(label: String, type: String, roverFile: File, baseFile: File, location: Location) :Single<SubmitProcessResult> {
+        return jasonService!!.submitProcess(label, type, roverFile, baseFile, location)
     }
 
     /**
