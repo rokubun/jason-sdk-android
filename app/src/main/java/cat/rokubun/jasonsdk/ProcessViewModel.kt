@@ -1,15 +1,9 @@
 package cat.rokubun.jasonsdk
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.Navigation
-import cat.rokubun.jason.JasonClient
-import cat.rokubun.jason.Location
-import cat.rokubun.jason.ProcessStatus
-import cat.rokubun.jason.User
+import cat.rokubun.jason.*
 import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
@@ -24,6 +18,7 @@ class ProcessViewModel(application: Application) : AndroidViewModel(application)
     var submitLiveData: MutableLiveData<SubmitProcessResult> = MutableLiveData()
     var userLiveData: MutableLiveData<User> = MutableLiveData()
     var processResultLivedata :MutableLiveData<ProcessStatus> = MutableLiveData()
+    var processInfoLiveData: MutableLiveData<List<ProcessInfo>> = MutableLiveData()
     private var compositeDisposable: CompositeDisposable? = null
 
 
@@ -61,6 +56,12 @@ class ProcessViewModel(application: Application) : AndroidViewModel(application)
         compositeDisposable!!.add(jasonClient!!.getProcessStatus(processId.toInt(), maxTimeoutMillis)
             .subscribe({processResultLivedata.postValue(it)},
                 {error -> Throwable(error.localizedMessage)})!!)
+    }
+
+    fun getProcesses(token: String){
+        compositeDisposable!!.add(jasonClient!!.getProcesses(token)
+            .subscribe({ processInfoLiveData.postValue(it) },{ error -> Throwable(error.localizedMessage)})
+        )
     }
 
 }

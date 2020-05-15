@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,11 +93,20 @@ class SubmitProcessFragment : Fragment() {
     @OnClick(R.id.selectFileButton)
     fun uploadFile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-            .addCategory(Intent.CATEGORY_OPENABLE)
-            .setType("text/plain")
-            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            startActivityForResult(Intent.createChooser(intent,"Files"), PICKFILE_RESULT_CODE)
+    }
 
-        startActivityForResult(Intent.createChooser(intent,"Files"), PICKFILE_RESULT_CODE)
+    fun getProcesses(token: String) {
+        processViewModel.getProcesses(token)
+        processViewModel.processInfoLiveData.observe(this, Observer {
+                for (pro in it) {
+                Log.d("id", pro.id.toString())
+                Log.d("process", pro.sourceFile.split('/').last())
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

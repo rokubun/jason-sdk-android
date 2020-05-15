@@ -6,9 +6,12 @@ import cat.rokubun.jason.*
 import cat.rokubun.jason.Location
 import cat.rokubun.jason.User
 import cat.rokubun.jason.repository.remote.ApiService
+import cat.rokubun.jason.repository.remote.dto.ProcessApiResult
+import cat.rokubun.jason.repository.remote.dto.ResultsResponse
 import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.jason.repository.remote.dto.UserLoginResult
 import cat.rokubun.jason.utils.Hasher
+import cat.rokubun.jason.ProcessInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
@@ -213,6 +216,51 @@ class JasonService {
 
     private suspend fun getProcessInformation(processId: Int) =
         apiService.getProcessInformation(processId, this.token!!)
+
+    /**
+     * Get user's processes
+     * @param token users token
+     * @return [Single]<list<[ProcessInfo]>>
+     */
+
+    fun getProcesses(token: String): Single<List<ProcessInfo>> {
+        return Single.create { emiter ->
+            val response = apiService.getAllProcess(token).enqueue(object : Callback<List<ProcessApiResult>> {
+                override fun onFailure(call: Call<List<ProcessApiResult>>, t: Throwable) {
+                    emiter.onError(Throwable(t.localizedMessage))
+                }
+
+                override fun onResponse(
+                    call: Call<List<ProcessApiResult>>,
+                    response: Response<List<ProcessApiResult>>
+                ) {
+                    val processInfoList: ArrayList<ProcessInfo> ?= arrayListOf()
+                    val resultList: ArrayList<ResultsResponse> ?= arrayListOf()
+
+                    for (apiResponse in response.body()!!) {
+                       for(res in apiResponse.results){
+                            val result = ResultsResponse(res.type, res.name, res.value)
+                            resultList!!.add(result)
+                       }
+
+                        val process = ProcessInfo(
+                            apiResponse.id,
+                            apiResponse.userName,
+                            apiResponse.type,
+                            apiResponse.status,
+                            apiResponse.sourceFile,
+                            apiResponse.basePosition,
+                            apiResponse.created,
+                            apiResponse.label,
+                            ProcessResult(resultList!!.toList())
+                        )
+                        processInfoList!!.add(process)
+                    }
+                    emiter.onSuccess(processInfoList!!)
+                }
+            })
+        }
+    }
 
     /**
      * Return Minetype of URL

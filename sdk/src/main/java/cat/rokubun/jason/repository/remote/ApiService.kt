@@ -1,5 +1,6 @@
 package cat.rokubun.jason.repository.remote
 
+import cat.rokubun.jason.repository.remote.dto.ProcessApiResult
 import cat.rokubun.jason.repository.remote.dto.ProcessStatusResult
 import cat.rokubun.jason.repository.remote.dto.SubmitProcessResult
 import cat.rokubun.jason.repository.remote.dto.UserLoginResult
@@ -40,5 +41,9 @@ interface ApiService {
 
     @GET( "processes/{id}")
     suspend fun getProcessInformation(@Path("id") processId: Int, @Query("token") token: String): Response<ProcessStatusResult>
+
+
+    @GET("users/{token}/processes")
+    fun getAllProcess(@Path("token") token: String): Call<List<ProcessApiResult>>
 }
 

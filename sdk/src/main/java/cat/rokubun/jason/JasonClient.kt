@@ -107,6 +107,16 @@ class JasonClient private constructor(context: Context) {
         return jasonService!!.getProcessStatus(processId, maxTimeoutMillis)
     }
 
+    /**
+     * Get user's processes
+     * @param toke user's token
+     * @return Single <List<[ProcessInfo]>>
+     */
+    fun getProcesses(token: String): Single<List<ProcessInfo>>{
+        return jasonService!!.getProcesses(token)
+    }
+
+
 }
 
 
