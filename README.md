@@ -10,6 +10,7 @@ without the need to access the front-end.
 The online documentation of the service can be found [here](https://jason.docs.rokubun.cat).
 
 Gradle dependencies for SDK:
+
 ``` java
 dependencies { 
 
@@ -30,7 +31,9 @@ dependencies {
 
 }
 ```
+
 Gradle dependencies for demo App:
+
 ``` java
 dependencies {
    
