@@ -53,46 +53,50 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="44dp"
         android:fontFamily="sans-serif-light"
         android:lineSpacingExtra="0sp"
         android:text="@string/file"
-        android:visibility="gone"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="20sp"
         android:typeface="normal"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/baseFileTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/selectFileButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
         android:text="@string/select_file"
-        app:layout_constraintBottom_toTopOf="@+id/process_button"
+        app:layout_constraintBottom_toTopOf="@+id/processButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/baseTitle" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/process_button"
+        android:id="@+id/processButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
         android:text="@string/process"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/selectFileButton" />
 
     <TextView
         android:id="@+id/roverFileNameTextView"

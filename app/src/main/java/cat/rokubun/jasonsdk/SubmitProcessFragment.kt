@@ -33,7 +33,7 @@ import java.io.FileOutputStream
  */
 class SubmitProcessFragment : Fragment() {
 
-    @BindView(R.id.process_button)
+    @BindView(R.id.processButton)
     lateinit var processButton: Button
     @BindView(R.id.selectFileButton)
     lateinit var uploadButton: Button
@@ -61,7 +61,7 @@ class SubmitProcessFragment : Fragment() {
         return view
     }
 
-    @OnClick(R.id.process_button)
+    @OnClick(R.id.processButton)
     fun processFile() {
          when {
              fileList.isNotEmpty() -> {
@@ -85,7 +85,7 @@ class SubmitProcessFragment : Fragment() {
                 val action = SubmitProcessFragmentDirections.actionSubmitToLogs(it.id!!)
                 Navigation.findNavController(this.view!!).navigate(action)
             } else {
-                Toast.makeText(context, "Somenthing went wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         })
     }

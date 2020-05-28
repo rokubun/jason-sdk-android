@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".ResultProcessFragament">
 
-        <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment layout -->
 
     <TextView
         android:id="@+id/processResultTextView"
@@ -23,91 +24,112 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/sppKmlTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/spp_kml_url"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/processResultTextView" />
-
-    <TextView
-        android:id="@+id/sppKmlUrlTextView"
-        android:layout_width="256dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:text=""
-        app:layout_constraintStart_toEndOf="@+id/sppKmlTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/processResultTextView" />
-
-    <TextView
-        android:id="@+id/SppTitleTextView"
+    <LinearLayout
+        android:id="@+id/sppKmlLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_height="50dp"
         android:layout_marginTop="24dp"
-        android:text="@string/spp_csv_url"
-        app:layout_constraintEnd_toEndOf="@+id/sppKmlTitleTextView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sppKmlUrlTextView" />
-
-    <TextView
-        android:id="@+id/sppCsvUrlTextView"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text=""
-        app:layout_constraintStart_toEndOf="@+id/SppTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/sppKmlUrlTextView" />
-
-    <TextView
-        android:id="@+id/processTypeTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/process_type"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sppCsvUrlTextView" />
-
-    <TextView
-        android:id="@+id/processTypeTextView"
-        android:layout_width="245dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
-        android:text=""
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/processTypeTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/sppCsvUrlTextView" />
-
-    <TextView
-        android:id="@+id/skyplotTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/sky_plot_url"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/processTypeTextView" />
-    <TextView
-        android:id="@+id/skyplotUrlTextView"
+        app:layout_constraintTop_toBottomOf="@+id/processResultTextView">
+
+        <TextView
+            android:id="@+id/sppKmlTitleTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/spp_kml_url" />
+
+        <TextView
+            android:id="@+id/sppKmlUrlTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sppCsvLayout"
         android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sppKmlLayout">
+
+        <TextView
+            android:id="@+id/SppTitleTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/spp_csv_url" />
+
+        <TextView
+            android:id="@+id/sppCsvUrlTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/processTypeLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sppCsvLayout">
+
+        <TextView
+            android:id="@+id/processTypeTitleTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/process_type" />
+
+        <TextView
+            android:id="@+id/processTypeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SkyplotLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/processTypeLayout">
+
+        <TextView
+            android:id="@+id/skyplotTitleTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sky_plot_url" />
+
+        <TextView
+            android:id="@+id/skyplotUrlTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" />
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/retryButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
-        android:text=""
-        android:textSize="14sp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/retry_text"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/skyplotTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/processTypeTextView" />
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/SkyplotLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
