@@ -37,14 +37,14 @@ dependencies {
     implementation 'cat.rokubun.jason:sdk:1.12.0'
     
     // https://github.com/square/retrofit
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
-    implementation "com.squareup.retrofit2:retrofit:2.7.2'"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.1"
+    implementation "com.squareup.retrofit2:retrofit:2.7.2"
     // https://github.com/square/okhttp
     implementation "com.squareup.okhttp3:okhttp:4.4.0"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.4.0"
      // https://github.com/ReactiveX/RxAndroid
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
     implementation "io.reactivex.rxjava3:rxjava:3.0.1"
     //https://github.com/Kotlin/
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.10"
@@ -63,9 +63,9 @@ dependencies {
     //https://jakewharton.github.io/butterknife/
     implementation "com.jakewharton:butterknife:$butterknife_version"
     //Recyclerview
-    implementation 'com.android.support:recyclerview-v7:+'
+    implementation "com.android.support:recyclerview-v7:+"
     //Material 
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation "com.google.android.material:material:1.1.0"
 
 }
 ```
@@ -74,13 +74,13 @@ dependencies {
 
 It is important that you have the `JASON_API_KEY` and `JASON_SECRET_TOKEN` 
 environment variables. These can be fetched by accessing your area in the
-Jason PaaS and then going to `My Account` -> `API Credentials`.
+[Jason PaaS](https://jason.rokubun.cat/#!/account) and then going to `My Account` -> `API Credentials`.
 
 ```java
   Context context;
 
   String processId=3145;
-  Long maxTimeoutMillis  60000L;
+  Long maxTimeoutMillis = 60000L;
 
   //Instantiate a JasanClient
   JasonClient jasonClient = JasonClient.Companion.getInstance(context);
@@ -99,7 +99,7 @@ Jason PaaS and then going to `My Account` -> `API Credentials`.
   
   // Get the status of your process
   Observable<ProcessStatus> processStatus =  jasonClient.getProcessStatus(processId, maxTimeoutMillis) 
-  processStatus.map(process ->processStatus = new ProcessStatus(process.processLog, process.processResult))
+  processStatus.map(process -> processStatus = new ProcessStatus(process.processLog, process.processResult))
 
   // When process is finished you can get a specific result
   processStatus.processResult.getSppKmlUrl()
