@@ -92,6 +92,9 @@ class JasonService {
                             401 -> {
                                 emitter.onError(Throwable(ResponseCodeEum.FORBIDDEN.description))
                             }
+                            else -> {
+                                emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
+                            }
                         }
                     }
                 }))
@@ -114,7 +117,6 @@ class JasonService {
      * @param location of the base station
      * @return Single<SubmitProcessResult>
      */
-    //TODO label
     fun submitProcess(label: String, type: String, roverFile: File, baseFile: File? = null, location: Location? = null): Single<SubmitProcessResult> {
         val requestFile = roverFile.asRequestBody(getMimeType(roverFile.name)?.toMediaTypeOrNull())
         val roverPartFile = MultipartBody.Part.createFormData("rover_file", roverFile.name, requestFile)
@@ -158,6 +160,32 @@ class JasonService {
                 emitter.onSuccess(SubmitProcessResult(response.body()?.message, response.body()?.id))
 
             }
+        }
+    }
+
+    fun retryProcess(processId: Int): Single<SubmitProcessResult> {
+        return Single.create { emitter ->
+            apiService.retry(processId, this.token!!)
+                .enqueue((object : Callback<SubmitProcessResult> {
+                    override fun onFailure(call: Call<SubmitProcessResult>, t: Throwable) {
+                        emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
+                    }
+
+                    override fun onResponse(
+                        call: Call<SubmitProcessResult>,
+                        response: Response<SubmitProcessResult>
+                    ) {
+                        when (response.code()) {
+                            200 -> {
+                                emitter.onSuccess(SubmitProcessResult(response.body()?.message, response.body()?.id))
+
+                            }
+                            else -> {
+                                emitter.onError(Throwable(ResponseCodeEum.ERROR.description))
+                            }
+                        }
+                    }
+                }))
         }
     }
 
@@ -273,6 +301,8 @@ class JasonService {
         }
         return type
     }
+
+
 }
 
     enum class ResponseCodeEum(val code: Int, val description: String) {

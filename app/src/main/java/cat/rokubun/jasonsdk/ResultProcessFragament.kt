@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 
 /**
  * Show some Process results
@@ -41,12 +44,14 @@ class ResultProcessFragament : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_result_process, container, false)
         ButterKnife.bind(this, view)
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
         setResultsTextView()
+
     }
 
     fun setResultsTextView(){
@@ -59,5 +64,17 @@ class ResultProcessFragament : Fragment() {
             skyPlotUrl.text = it.processResult!!.getSkyPlotUrl()
         })
 
+    }
+
+    @OnClick(R.id.retryButton)
+    fun onRetryButtonClick() {
+        processViewModel.retryProcess(Integer.parseInt(args.idProcess))
+        processViewModel.retryLiveData.observe(viewLifecycleOwner, Observer {
+            if (it.message.equals("success")) {
+                Toast.makeText(context, "Retry succesful", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

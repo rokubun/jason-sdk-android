@@ -1,6 +1,7 @@
 package cat.rokubun.jasonsdk
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import cat.rokubun.jason.*
@@ -16,6 +17,7 @@ class ProcessViewModel(application: Application) : AndroidViewModel(application)
 
     var jasonClient: JasonClient? = null
     var submitLiveData: MutableLiveData<SubmitProcessResult> = MutableLiveData()
+    var retryLiveData: MutableLiveData<SubmitProcessResult> = MutableLiveData()
     var userLiveData: MutableLiveData<User> = MutableLiveData()
     var processResultLivedata :MutableLiveData<ProcessStatus> = MutableLiveData()
     var processInfoLiveData: MutableLiveData<List<ProcessInfo>> = MutableLiveData()
@@ -45,9 +47,20 @@ class ProcessViewModel(application: Application) : AndroidViewModel(application)
       )
     }
 
+    fun retryProcess(id: Int) {
+        compositeDisposable!!.add(jasonClient?.retryProcess(id)?.toObservable()?.
+            subscribe({
+                Log.d("DEBUG", "retry3 ");
+
+                retryLiveData.postValue(it)
+            },
+                { Throwable(it.message) })!!
+        )
+    }
+
     fun loginToJason(email: String, password: String){
-        compositeDisposable!!.add(jasonClient?.login(email, password)
-            ?.subscribe(
+        compositeDisposable!!.add(jasonClient?.login(email, password)?.
+            subscribe(
                     { userLiveData.postValue(it)},
                     { error -> Throwable(error.localizedMessage)})!!)
     }

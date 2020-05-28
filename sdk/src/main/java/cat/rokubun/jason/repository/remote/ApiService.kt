@@ -39,6 +39,11 @@ interface ApiService {
                       @Part base_file: MultipartBody.Part,
                       @Part ("location") location: RequestBody?): Call<SubmitProcessResult>
 
+
+    @FormUrlEncoded
+    @POST( "processes/{id}/retry")
+    fun retry(@Path("id") processId: Int, @Field("token") token: String) : Call<SubmitProcessResult>
+
     @GET( "processes/{id}")
     suspend fun getProcessInformation(@Path("id") processId: Int, @Query("token") token: String): Response<ProcessStatusResult>
 

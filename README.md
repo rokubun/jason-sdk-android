@@ -52,7 +52,7 @@ dependencies {
 ## Authentication
 
 It is important that you have the `JASON_API_KEY` and `JASON_SECRET_TOKEN` 
-environement variables. These can be fetched by accessing your area in the 
+environment variables. These can be fetched by accessing your area in the
 Jason PaaS and then going to `My Account` -> `API Credentials`.
 
 ## How to Use the SDK module

@@ -96,6 +96,21 @@ class JasonClient private constructor(context: Context) {
     }
 
     /**
+     * Perform a PPK processing specifying a rover, base file as well as the location of the base
+     * station and return a Single <SubmitProcessResult>
+     * Compatible files are Argounaut, Ublox, Septentrio, Rinex 2/3 devices and
+     * Android GnssLogger, GPS_Test and GalileoPVT applications
+     * @param type of process to be performed {@sample GNSS, CONVERTER}
+     * @param roverFile
+     * @param baseFile
+     * @param location
+     * @return Single<[SubmitProcessResult]> which is the API response
+     */
+    fun retryProcess(processId: Int): Single<SubmitProcessResult> {
+        return jasonService!!.retryProcess(processId)
+    }
+
+    /**
      * Get process status with the log and the results. The Observable will be updated every one
      * second until the processing finishes, either successful or with an error.
      * @param processId process ID
