@@ -65,6 +65,14 @@ class LoginFragment : Fragment() {
 
         val view: View = inflater.inflate(R.layout.fragment_login, container, false)
         ButterKnife.bind(this, view)
+        processViewModel.userLiveData.observe(viewLifecycleOwner, Observer {
+            if (it.secretToken.equals("")) {
+                Toast.makeText(context, "Can not connect", Toast.LENGTH_SHORT).show()
+            } else {
+
+                Navigation.findNavController(this.view!!).navigate(R.id.action_login_to_submit)
+            }
+        })
         return view
     }
 
@@ -75,14 +83,7 @@ class LoginFragment : Fragment() {
             email = userEditText.text.toString()
             password = passwordEditText.text.toString()
             processViewModel.loginToJason(email!!, password!!)
-            processViewModel.userLiveData.observe(this, Observer {
-                if (it.secretToken.equals("")) {
-                    Toast.makeText(context, "Can not connect", Toast.LENGTH_SHORT).show()
-                } else {
 
-                    Navigation.findNavController(this.view!!).navigate(R.id.action_login_to_submit)
-                }
-            })
         }
     }
 
