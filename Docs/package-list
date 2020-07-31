@@ -1,0 +1,8 @@
+$dokka.format:markdown
+$dokka.linkExtension:md
+
+cat.rokubun.jason
+cat.rokubun.jason.repository
+cat.rokubun.jason.repository.remote
+cat.rokubun.jason.repository.remote.dto
+cat.rokubun.jason.utils
