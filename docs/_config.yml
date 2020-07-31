@@ -1,0 +1,13 @@
+title: Rokubun - Jason Sdk for Android
+author: Rokubun S.L.
+email: info@rokubun.cat
+description: > # this means to ignore newlines until "baseurl:"
+  Jason GNSS Positioning-as-a-Service is a cloud-based positioning engine 
+  that uses GNSS data. One of the main features of this service is that offers an API so that users can automatize 
+  the GNSS data processing without the need to access the front-end.
+# social links
+twitter_username: rokubn # DO NOT include the @ character, or else the build will fail!
+github_username:  rokubun # DO NOT include the @ character, or else the build will fail!
+
+show_excerpts: true # set to false to remove excerpts on the homepage
+theme: minima
