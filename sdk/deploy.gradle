@@ -19,8 +19,8 @@ ext {
 version = libVersion
 group  = groupId
 bintray {
-    user = System.getProperty('bintray.user')
-    key = System.getProperty('bintray.key')
+    user = System.getenv("bintrayUser")
+    key = System.getenv("bintrayApiKey")
     configurations = ['archives']
     pkg {
         repo = 'jason-sdk' //bintray repo
