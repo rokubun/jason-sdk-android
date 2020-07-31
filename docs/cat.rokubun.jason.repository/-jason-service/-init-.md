@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`JasonService(context: `[`Context`](https://developer.android.com/reference/android/content/Context.html)`)`
+`JasonService(context: `[`Context`](https://d.android.com/reference/android/content/Context.html)`)`
 
 instantiate ServiceFactory and create an ApiService
 

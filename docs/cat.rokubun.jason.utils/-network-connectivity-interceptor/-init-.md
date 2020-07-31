@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`NetworkConnectivityInterceptor(context: `[`Context`](https://developer.android.com/reference/android/content/Context.html)`)`
+`NetworkConnectivityInterceptor(context: `[`Context`](https://d.android.com/reference/android/content/Context.html)`)`
 
 Is responsible for checking if the device has an internet connection
 

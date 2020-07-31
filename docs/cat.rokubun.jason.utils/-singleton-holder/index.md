@@ -6,9 +6,12 @@
 
 ### Constructors
 
+| Name | Summary |
+|---|---|
 | [&lt;init&gt;](-init-.md) | `SingletonHolder(creator: (A) -> T)` |
 
 ### Functions
 
+| Name | Summary |
+|---|---|
 | [getInstance](get-instance.md) | `fun getInstance(arg: A): T` |
-

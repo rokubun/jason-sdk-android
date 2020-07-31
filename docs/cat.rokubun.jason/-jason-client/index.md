@@ -16,10 +16,14 @@ JasonClient is responsible for communicating with JASON related services
 
 ### Types
 
-| [Companion](-companion/index.md) | Provides a JasonClient singleton.`companion object Companion : `[`SingletonHolder`](../../cat.rokubun.jason.utils/-singleton-holder/index.md)`<`[`JasonClient`](./index.md)`, `[`Context`](https://developer.android.com/reference/android/content/Context.html)`>` |
+| Name | Summary |
+|---|---|
+| [Companion](-companion/index.md) | Provides a JasonClient singleton.`companion object Companion : `[`SingletonHolder`](../../cat.rokubun.jason.utils/-singleton-holder/index.md)`<`[`JasonClient`](./index.md)`, `[`Context`](https://d.android.com/reference/android/content/Context.html)`>` |
 
 ### Functions
 
+| Name | Summary |
+|---|---|
 | [getProcesses](get-processes.md) | Get user's processes`fun getProcesses(token: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Single`](http://reactivex.io/RxJava/javadoc/io/reactivex/Single.html)`<`[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ProcessInfo`](../-process-info/index.md)`>>` |
 | [getProcessStatus](get-process-status.md) | Get process status with the log and the results. The Observable will be updated every one second until the processing finishes, either successful or with an error.`fun getProcessStatus(processId: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, maxTimeoutMillis: `[`Long`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html)` = MAX_LOG_REQUEST_TIMEOUT_MS): `[`Observable`](http://reactivex.io/RxJava/javadoc/io/reactivex/Observable.html)`<`[`ProcessStatus`](../-process-status/index.md)`>` |
 | [login](login.md) | Perform the Login process to Jason and return a Single object.`fun login(email: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?, password: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Single`](http://reactivex.io/RxJava/javadoc/io/reactivex/Single.html)`<`[`User`](../-user/index.md)`>?`<br>Set token instead of retrieving it with the login.`fun login(token: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
@@ -29,6 +33,7 @@ JasonClient is responsible for communicating with JASON related services
 
 ### Companion Object Properties
 
+| Name | Summary |
+|---|---|
 | [API_KEY](-a-p-i_-k-e-y.md) | Api key for request`val API_KEY: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [URL](-u-r-l.md) | base URL for request`val URL: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-

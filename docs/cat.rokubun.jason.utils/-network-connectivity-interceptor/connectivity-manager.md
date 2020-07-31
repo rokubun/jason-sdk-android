@@ -2,4 +2,4 @@
 
 # connectivityManager
 
-`val connectivityManager: `[`ConnectivityManager`](https://developer.android.com/reference/android/net/ConnectivityManager.html)
+`val connectivityManager: `[`ConnectivityManager`](https://d.android.com/reference/android/net/ConnectivityManager.html)

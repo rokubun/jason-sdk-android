@@ -2,6 +2,8 @@
 
 ### All Types
 
+| Name | Summary |
+|---|---|
 |
 
 ##### [cat.rokubun.jason.repository.remote.ApiService](../cat.rokubun.jason.repository.remote/-api-service/index.md)

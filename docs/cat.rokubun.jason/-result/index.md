@@ -6,6 +6,7 @@
 
 ### Types
 
+| Name | Summary |
+|---|---|
 | [Error](-error/index.md) | `data class Error<out T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`> : `[`Result`](./index.md)`<T>` |
 | [Success](-success/index.md) | `data class Success<out T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`> : `[`Result`](./index.md)`<T>` |
-

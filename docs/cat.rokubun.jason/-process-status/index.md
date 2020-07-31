@@ -9,10 +9,13 @@ Contains the result of the processes that are emitted every periodically
 
 ### Constructors
 
+| Name | Summary |
+|---|---|
 | [&lt;init&gt;](-init-.md) | `ProcessStatus(processLog: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ProcessLog`](../-process-log/index.md)`>)`<br>`ProcessStatus(processLog: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ProcessLog`](../-process-log/index.md)`>, processResult: `[`ProcessResult`](../-process-result/index.md)`)` |
 
 ### Properties
 
+| Name | Summary |
+|---|---|
 | [processLog](process-log.md) | `var processLog: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ProcessLog`](../-process-log/index.md)`>?` |
 | [processResult](process-result.md) | `var processResult: `[`ProcessResult`](../-process-result/index.md)`?` |
-

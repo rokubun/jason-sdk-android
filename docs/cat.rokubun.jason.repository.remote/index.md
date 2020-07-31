@@ -4,5 +4,6 @@
 
 ### Types
 
+| Name | Summary |
+|---|---|
 | [ApiService](-api-service/index.md) | Interface to make API requests`interface ApiService` |
-

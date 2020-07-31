@@ -8,11 +8,14 @@ Process status response.
 
 ### Constructors
 
+| Name | Summary |
+|---|---|
 | [&lt;init&gt;](-init-.md) | Process status response.`ProcessStatusResult(process: `[`ProcessDetailResult`](../-process-detail-result/index.md)`, log: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Log`](../-log/index.md)`>, results: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ResultsResponse`](../-results-response/index.md)`>)` |
 
 ### Properties
 
+| Name | Summary |
+|---|---|
 | [log](log.md) | `val log: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Log`](../-log/index.md)`>` |
 | [process](process.md) | `val process: `[`ProcessDetailResult`](../-process-detail-result/index.md) |
 | [results](results.md) | `val results: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ResultsResponse`](../-results-response/index.md)`>` |
-

@@ -12,14 +12,20 @@ This class returns information from the processed file
 
 ### Constructors
 
+| Name | Summary |
+|---|---|
 | [&lt;init&gt;](-init-.md) | This class returns information from the processed file`ProcessResult(listResultsResponse: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ResultsResponse`](../../cat.rokubun.jason.repository.remote.dto/-results-response/index.md)`>)` |
 
 ### Properties
 
+| Name | Summary |
+|---|---|
 | [listResultsResponse](list-results-response.md) | list of [ResultsResponse](../../cat.rokubun.jason.repository.remote.dto/-results-response/index.md)`val listResultsResponse: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ResultsResponse`](../../cat.rokubun.jason.repository.remote.dto/-results-response/index.md)`>` |
 
 ### Functions
 
+| Name | Summary |
+|---|---|
 | [getNumEpochs](get-num-epochs.md) | Returns number of epochs`fun getNumEpochs(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [getNumSatellitesUrlPng](get-num-satellites-url-png.md) | Returns number of satellites url.`fun getNumSatellitesUrlPng(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [getPreciseCsvUrl](get-precise-csv-url.md) | Returns precise CSV url.`fun getPreciseCsvUrl(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
@@ -31,4 +37,3 @@ This class returns information from the processed file
 | [getStaticPosition](get-static-position.md) | Returns static position`fun getStaticPosition(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [getZipUrl](get-zip-url.md) | Returns zip url`fun getZipUrl(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [isStatic](is-static.md) | Returns if a process is static`fun isStatic(): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
-

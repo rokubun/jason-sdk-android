@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`ServiceFactory(context: `[`Context`](https://developer.android.com/reference/android/content/Context.html)`)`
+`ServiceFactory(context: `[`Context`](https://d.android.com/reference/android/content/Context.html)`)`
 
 Create an implementation of Retrofit to communicate with a service API.
 
