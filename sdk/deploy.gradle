@@ -27,6 +27,7 @@ bintray {
         name = 'cat.rokubun.jason:android-sdk' //bintray package
         userOrg = 'rokubun'
         vcsUrl = "https://github.com/rokubun/jason-sdk-android"
+        publish = true
         version {
             name = libVersion
             //vcsTag = gitVersionName version control tag name
