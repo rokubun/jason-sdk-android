@@ -91,7 +91,7 @@ environment variables. These can be fetched by accessing your area in the
   // process with username and password
   jasonClient.loging(username, password);
   // Or you can login by settign the token 
-  jasonCLient.login(token)
+  jasonClient.login(token)
   
   // Submit a process
   Single<ProcessInformation> submitProcess = jasonClient.submitProcess(type, roverFile);
