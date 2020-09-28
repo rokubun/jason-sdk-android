@@ -36,6 +36,7 @@ jobs:
         run: bash ./gradlew :sdk:assembleRelease --stacktrace
 
   publish:
+    if: github.repository == 'rokubun/jason-sdk-android'
     name: Publish on Bintray
     runs-on: ubuntu-18.04
 
