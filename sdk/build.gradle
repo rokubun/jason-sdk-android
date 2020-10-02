@@ -81,9 +81,7 @@ dokka {
         for (String docUrl : ["https://d.android.com/reference/",
                               "http://reactivex.io/RxJava/javadoc/",
                               "https://square.github.io/retrofit/2.x/retrofit/",
-                              "https://javadoc.io/doc/com.squareup.okhttp3/okhttp/3.14.7/okhttp3/"
-
-        ]) {
+                              "https://square.github.io/okhttp/4.x/okhttp/okhttp3/#package-okhttp3/"]) {
             externalDocumentationLink {
                 // Root URL of the generated documentation to link with. The trailing slash is required!
                 url = new URL(docUrl)

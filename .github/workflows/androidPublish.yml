@@ -39,7 +39,7 @@ jobs:
     if: github.repository == 'rokubun/jason-sdk-android'
     name: Publish on Bintray
     runs-on: ubuntu-18.04
-
+    needs: [test, apk]
     steps:
       - uses: actions/checkout@v1
       - name: Set up JDK 1.8
@@ -52,4 +52,4 @@ jobs:
         env:
           bintrayUser: ${{ secrets.BINTRAY_USER }}
           bintrayApiKey: ${{ secrets.BINTRAY_API_KEY }}
-        run: bash ./gradlew bintrayUpload
+        run: bash ./gradlew bintrayUpload --stacktrace
