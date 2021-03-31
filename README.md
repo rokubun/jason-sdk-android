@@ -1,6 +1,5 @@
 # Android SDK for Jason GNSS Positioning-as-a-Service
-![Bintray](https://img.shields.io/bintray/v/rokubun/jason-sdk/cat.rokubun.jason:android-sdk)
-
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/cat.rokubun.jason/sdk/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/cat.rokubun.jason/sdk)
 
 [Jason GNSS Positioning-as-a-Service](https://jason.rokubun.cat) is a cloud-based
 positioning engine that uses GNSS data. One of the main features of this service
@@ -28,13 +27,14 @@ Permission approval:
 </manifest>
 
 ```
-Gradle dependencies for SDK: 
+Gradle dependencies for SDK:
+The latest version of the SDK can be found in  [Maven Central Repository](https://search.maven.org/artifact/cat.rokubun.jason/sdk).
 
 ``` java
-dependencies { 
-    
+dependencies {
+
     // Jason SDK
-    implementation 'cat.rokubun.jason:sdk:1.12.0'
+    implementation 'cat.rokubun.jason:sdk:$jason_version'
     
     // https://github.com/square/retrofit
     implementation "com.squareup.retrofit2:converter-gson:2.7.1"
