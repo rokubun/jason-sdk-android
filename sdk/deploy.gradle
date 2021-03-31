@@ -23,6 +23,7 @@ task androidSourcesJar(type: Jar) {
         task javadoc(type: Javadoc, dependsOn: dokka) {
         }
     }
+
 }
 
 task javadocJar(type: Jar, dependsOn: dokka) {
@@ -66,12 +67,17 @@ publishing {
             artifactId PUBLISH_ARTIFACT_ID
             version PUBLISH_VERSION
             if (project.plugins.findPlugin("com.android.library")) {
-                artifact("$buildDir/outputs/aar/jason-${project.getName()}-${version}.aar")
+                artifact("$buildDir/outputs/aar/jason-${project.getName()}-${version}.aar"){
+                    builtBy assemble
+                }
+
             } else {
                 artifact("$buildDir/libs/${project.getName()}-${version}.jar")
             }
+
             artifact androidSourcesJar
             artifact javadocJar
+
 
             pom {
                 name = 'Android SDK for Jason GNSS Positioning-as-a-Service'

@@ -16,7 +16,6 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -25,10 +24,11 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.7.3"
+    id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
     id "maven-publish"
     id "java"
 }
+
 apply plugin: 'io.codearte.nexus-staging'
 
 allprojects {
